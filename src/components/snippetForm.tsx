@@ -26,8 +26,6 @@ export default function SnippetForm() {
     } finally {
       setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (

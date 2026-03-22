@@ -1,5 +1,7 @@
 "use client";
 
+import SnippetForm from "@/components/snippetForm";
+import SnippetList from "@/components/snippetList";
 import { useAuth } from "@/context/authContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -28,6 +30,8 @@ export default function DashboardPage() {
       >
         Cerrar sesión
       </button>
+      <SnippetForm />
+      <SnippetList />
     </main>
   );
 }
