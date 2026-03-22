@@ -12,7 +12,7 @@ export default function LoginPage() {
     // Se ejecuta al montar el componente y tambien cada vez que [user, loading] cambien
     if (!loading && user) {
       // Si no esta cargando (osea que useAuth() termino de leer el token) y hay un usuario, entonces vas al dashboard
-      router.push("/dashboard");
+      router.push("/boards");
     }
   }, [user, loading]);
 

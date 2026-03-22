@@ -2,6 +2,7 @@
 
 import { useAuth } from "@/context/authContext";
 import { createSnippet } from "@/lib/snippets";
+import Editor from "@monaco-editor/react";
 import { useState } from "react";
 
 export default function SnippetForm() {
@@ -52,12 +53,13 @@ export default function SnippetForm() {
           <option value="css">css</option>
         </select>
 
-        <textarea
-          name="code"
-          id="code"
+        <Editor
+          height="300px"
+          width="400px"
+          language={language}
           value={code}
-          onChange={(e) => setCode(e.target.value)}
-          placeholder="codigo"
+          onChange={(value) => setCode(value || "")}
+          theme="vs-dark"
         />
 
         <button onClick={handleSubmit} disabled={loading}>

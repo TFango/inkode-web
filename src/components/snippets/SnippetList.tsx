@@ -4,6 +4,7 @@ import { useAuth } from "@/context/authContext";
 import { deleteSnippet, getSnippets } from "@/lib/snippets";
 import { useEffect, useState } from "react";
 import { Snippet } from "@/types/snippet";
+import Editor from "@monaco-editor/react";
 
 export default function SnippetList() {
   const [snippets, setSnippets] = useState<Snippet[]>([]);
@@ -39,7 +40,14 @@ export default function SnippetList() {
             <div key={s.id}>
               <p>{s.title}</p>
               <p>{s.language}</p>
-              <p>{s.code}</p>
+              <Editor
+                height="300px"
+                width="500px"
+                value={s.code}
+                language={s.language}
+                theme="vs-dark"
+                options={{ readOnly: true }}
+              />
               <button onClick={() => handleDelete(s.id)}>
                 {loading ? "Borrando..." : "Eliminar"}
               </button>
