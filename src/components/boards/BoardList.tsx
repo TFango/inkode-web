@@ -40,7 +40,7 @@ export default function BoardList() {
           boards.map((b: Board) => (
             <div key={b.id}>
               <p>{b.name}</p>
-              <button onClick={() => router.push(`/boards/${b.id}`)}></button>
+              <button onClick={() => router.push(`/boards/${b.id}`)}>Ingresar</button>
               <button onClick={() => handleDelete(b.id)}>
                 {loading ? "Borrando..." : "Borrar"}
               </button>
