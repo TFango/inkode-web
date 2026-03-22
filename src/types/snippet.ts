@@ -1,6 +1,6 @@
 import { Timestamp } from "firebase/firestore";
 
-export type Snippets = {
+export type Snippet = {
   id: string;
   title: string;
   code: string;
