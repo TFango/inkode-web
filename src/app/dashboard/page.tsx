@@ -1,7 +1,7 @@
 "use client";
 
-import SnippetForm from "@/components/snippetForm";
-import SnippetList from "@/components/snippetList";
+import SnippetForm from "@/components/SnippetForm";
+import SnippetList from "@/components/SnippetList";
 import { useAuth } from "@/context/authContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
