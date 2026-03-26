@@ -1,4 +1,5 @@
 import Editor from "@monaco-editor/react";
+import { useEffect, useState } from "react";
 
 import {
   Geometry2d,
@@ -62,41 +63,9 @@ export class CodeBlockShapeUtil extends ShapeUtil<CodeBlockShape> {
   }
 
   component(shape: CodeBlockShape) {
-    const editor = useEditor();
-
     return (
-      <HTMLContainer
-        style={{
-          width: shape.props.w,
-          height: shape.props.h,
-          background: "#1e1e1e",
-          border: "1px solid #333",
-          borderRadius: 8,
-          overflow: "hidden",
-          pointerEvents: "all",
-        }}
-      >
-        <Editor
-          height="100%"
-          width="100%"
-          value={shape.props.code}
-          language={shape.props.language}
-          theme="vs-dark"
-          options={{
-            minimap: { enabled: false },
-            fontSize: 14,
-          }}
-          onChange={(value) => {
-            editor.updateShape({
-              id: shape.id,
-              type: "code-block",
-              props: {
-                ...shape.props,
-                code: value || "",
-              },
-            });
-          }}
-        />
+      <HTMLContainer style={{ width: shape.props.w, height: shape.props.h }}>
+        <CodeBlockContent shape={shape} />
       </HTMLContainer>
     );
   }
@@ -104,4 +73,85 @@ export class CodeBlockShapeUtil extends ShapeUtil<CodeBlockShape> {
   indicator(shape: CodeBlockShape) {
     return <rect width={shape.props.w} height={shape.props.h} />;
   }
+}
+
+export function CodeBlockContent({ shape }: { shape: CodeBlockShape }) {
+  const editor = useEditor();
+  const [isMoving, setIsMoving] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.code === "KeyQ") setIsMoving(true);
+    };
+
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.code === "KeyQ") setIsMoving(false);
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
+    };
+  }, []);
+
+  const handleCodeChange = (value: string | undefined) => {
+    editor.updateShape({
+      id: shape.id,
+      type: "code-block",
+      props: { code: value || "" },
+    });
+  };
+
+  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    editor.updateShape({
+      id: shape.id,
+      type: "code-block",
+      props: { language: e.target.value },
+    });
+  };
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(shape.props.code);
+  };
+
+  return (
+    <div
+      onPointerDown={(e) => e.stopPropagation()} // evita que tldraw intercepte los clicks
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        pointerEvents: isMoving ? "none" : "all",
+      }}
+    >
+      {/* Toolbar */}
+      <div style={{ display: "flex", gap: 8, padding: 8 }}>
+        <select value={shape.props.language} onChange={handleLanguageChange}>
+          <option value="javascript">JavaScript</option>
+          <option value="typescript">TypeScript</option>
+          <option value="python">Python</option>
+          <option value="java">Java</option>
+          <option value="html">HTML</option>
+          <option value="css">CSS</option>
+        </select>
+        <button onClick={handleCopy}>Copiar</button>
+      </div>
+
+      {/* Editor */}
+      <Editor
+        value={shape.props.code}
+        language={shape.props.language}
+        theme="vs-dark"
+        onChange={handleCodeChange}
+        options={{
+          readOnly: isMoving,
+          minimap: { enabled: false },
+        }}
+      />
+    </div>
+  );
 }

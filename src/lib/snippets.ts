@@ -11,6 +11,8 @@ import {
 } from "firebase/firestore";
 import { Snippet } from "@/types/snippet";
 
+
+
 export async function createSnippet(data: {
   title: string;
   code: string;
