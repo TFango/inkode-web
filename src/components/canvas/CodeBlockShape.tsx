@@ -1,3 +1,4 @@
+import { useMode } from "@/context/modeContext";
 import Editor from "@monaco-editor/react";
 import { useEffect, useState } from "react";
 
@@ -78,6 +79,9 @@ export class CodeBlockShapeUtil extends ShapeUtil<CodeBlockShape> {
 export function CodeBlockContent({ shape }: { shape: CodeBlockShape }) {
   const editor = useEditor();
   const [isMoving, setIsMoving] = useState(false);
+  const { mode } = useMode();
+
+  const isCodeMode = mode === "code";
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -87,7 +91,6 @@ export function CodeBlockContent({ shape }: { shape: CodeBlockShape }) {
     const handleKeyUp = (e: KeyboardEvent) => {
       if (e.code === "KeyQ") setIsMoving(false);
     };
-
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("keyup", handleKeyUp);
 
@@ -119,13 +122,13 @@ export function CodeBlockContent({ shape }: { shape: CodeBlockShape }) {
 
   return (
     <div
-      onPointerDown={(e) => e.stopPropagation()} // evita que tldraw intercepte los clicks
+      onPointerDown={(e) => e.stopPropagation()}
       style={{
         width: "100%",
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        pointerEvents: isMoving ? "none" : "all",
+        pointerEvents: isCodeMode ? "all" : "none",
       }}
     >
       {/* Toolbar */}
@@ -148,7 +151,7 @@ export function CodeBlockContent({ shape }: { shape: CodeBlockShape }) {
         theme="vs-dark"
         onChange={handleCodeChange}
         options={{
-          readOnly: isMoving,
+          readOnly: !isCodeMode,
           minimap: { enabled: false },
         }}
       />
