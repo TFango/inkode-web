@@ -11,6 +11,8 @@ import { CodeBlockShapeUtil } from "../canvas/CodeBlockShape";
 import AddCodeBlockButton from "../canvas/AddCodeBlockButton";
 import { ModeProvider } from "@/context/modeContext";
 import { ModeToggleButton } from "../canvas/ModeToggleButton";
+import ModeController from "../canvas/ModeController";
+import KeyboardBlocker from "../canvas/KeyboardBlocker";
 
 const shapeUtils = [CodeBlockShapeUtil];
 
@@ -36,6 +38,8 @@ export default function BoardCanvas({ boardId }: { boardId: string }) {
             InFrontOfTheCanvas: () => (
               <>
                 <ModeToggleButton />
+                <ModeController />
+                <KeyboardBlocker />
                 <AddCodeBlockButton />
                 <CanvasPesistence boardId={boardId} />
               </>
