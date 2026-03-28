@@ -1,30 +1,18 @@
 import { useMode } from "@/context/modeContext";
+import { TldrawUiButton } from "tldraw";
 
 export function ModeToggleButton() {
   const { mode, setMode } = useMode();
 
   return (
-    <div
-      style={{
-        position: "absolute",
-        top: 16,
-        left: 500,
-        zIndex: 1000,
-        pointerEvents: "all",
-      }}
+    <TldrawUiButton
+      type="icon"
+      onClick={() => setMode(mode === "code" ? "draw" : "code")}
+      title={
+        mode === "code" ? "Cambiar a Modo dibujo" : "Cambiar a Modo código"
+      }
     >
-      <button
-        onClick={() => setMode(mode === "code" ? "draw" : "code")}
-        style={{
-          position: "absolute",
-          top: 16,
-          right: 16,
-          zIndex: 9999,
-          pointerEvents: "all",
-        }}
-      >
-        {mode === "code" ? "Modo dibujo" : "Modo código"}
-      </button>
-    </div>
+      {mode === "code" ? "✏️" : "💻"}
+    </TldrawUiButton>
   );
 }

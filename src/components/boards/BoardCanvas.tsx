@@ -1,4 +1,3 @@
-// components/boards/BoardCanvas.tsx — cliente, con hooks y tldraw
 "use client";
 
 import { Tldraw } from "tldraw";
@@ -13,13 +12,15 @@ import { ModeProvider } from "@/context/modeContext";
 import { ModeToggleButton } from "../canvas/ModeToggleButton";
 import ModeController from "../canvas/ModeController";
 import KeyboardBlocker from "../canvas/KeyboardBlocker";
+import { useMode } from "@/context/modeContext";
+import { DefaultToolbar } from "tldraw";
 
 const shapeUtils = [CodeBlockShapeUtil];
 
 export default function BoardCanvas({ boardId }: { boardId: string }) {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const [mode, setMode] = useState<"code" | "draw">("code");
+  const [mode, setMode] = useState<"code" | "draw">("draw");
 
   useEffect(() => {
     if (!loading && !user) router.push("/login");
@@ -35,13 +36,30 @@ export default function BoardCanvas({ boardId }: { boardId: string }) {
           shapeUtils={shapeUtils}
           inferDarkMode
           components={{
+            Toolbar: ConditionalToolbar,
             InFrontOfTheCanvas: () => (
               <>
-                <ModeToggleButton />
                 <ModeController />
                 <KeyboardBlocker />
-                <AddCodeBlockButton />
                 <CanvasPesistence boardId={boardId} />
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: 60,
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    display: "flex",
+                    gap: 8,
+                    zIndex: 1000,
+                    pointerEvents: "all",
+                    background: "rgba(30,30,30,0.9)",
+                    padding: "6px 12px",
+                    borderRadius: 8,
+                  }}
+                >
+                  <ModeToggleButton />
+                  <AddCodeBlockButton />
+                </div>
               </>
             ),
           }}
@@ -50,3 +68,11 @@ export default function BoardCanvas({ boardId }: { boardId: string }) {
     </div>
   );
 }
+
+function ConditionalToolbar() {
+  const { mode } = useMode();
+  if (mode === "code") return null;
+  return <DefaultToolbar />;
+}
+
+

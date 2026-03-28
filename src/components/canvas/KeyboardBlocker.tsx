@@ -8,15 +8,19 @@ export default function KeyboardBlocker() {
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (mode === "code") {
+      const target = e.target as HTMLElement;
+      const isInsideMonaco = target?.closest(".monaco-editor") !== null;
+      if (isInsideMonaco) {
         e.stopPropagation();
       }
     };
 
     window.addEventListener("keydown", handler, true);
+    window.addEventListener("keyup", handler, true);
 
     return () => {
       window.removeEventListener("keydown", handler, true);
+      window.removeEventListener("keyup", handler, true);
     };
   }, [mode]);
 

@@ -131,7 +131,6 @@ export function CodeBlockContent({ shape }: { shape: CodeBlockShape }) {
         pointerEvents: isCodeMode ? "all" : "none",
       }}
     >
-      {/* Toolbar */}
       <div style={{ display: "flex", gap: 8, padding: 8 }}>
         <select value={shape.props.language} onChange={handleLanguageChange}>
           <option value="javascript">JavaScript</option>
@@ -141,10 +140,17 @@ export function CodeBlockContent({ shape }: { shape: CodeBlockShape }) {
           <option value="html">HTML</option>
           <option value="css">CSS</option>
         </select>
-        <button onClick={handleCopy}>Copiar</button>
+        <button
+          onPointerDown={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+          }}
+          onClick={() => navigator.clipboard.writeText(shape.props.code)}
+        >
+          Copiar
+        </button>
       </div>
 
-      {/* Editor */}
       <Editor
         value={shape.props.code}
         language={shape.props.language}

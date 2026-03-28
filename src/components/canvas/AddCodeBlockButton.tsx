@@ -1,6 +1,7 @@
 "use client";
 
 import { useEditor } from "tldraw";
+import { TldrawUiButton } from "tldraw";
 
 export default function AddCodeBlockButton() {
   const editor = useEditor();
@@ -25,28 +26,12 @@ export default function AddCodeBlockButton() {
   };
 
   return (
-    <div
-      style={{
-        position: "absolute",
-        top: 16,
-        left: 500,
-        zIndex: 1000,
-        pointerEvents: "all",
-      }}
+    <TldrawUiButton
+      type="icon"
+      onClick={handleAdd}
+      title="Agregar bloque de código"
     >
-      <button
-        onClick={handleAdd}
-        style={{
-          background: "red",
-          color: "white",
-          padding: "10px 14px",
-          borderRadius: 8,
-          cursor: "pointer",
-          pointerEvents: "all",
-        }}
-      >
-        + Agregar bloque
-      </button>
-    </div>
+      +
+    </TldrawUiButton>
   );
 }

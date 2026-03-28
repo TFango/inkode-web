@@ -23,7 +23,7 @@ export default function BoardsPage() {
       <div>
         <div>
           <h1>Bienvenido, {user?.displayName}</h1>
-          <p>{user?.email}</p>
+          {/* <p>{user?.email}</p> */}
           <button onClick={logout}>Cerrar sesion</button>
         </div>
 
