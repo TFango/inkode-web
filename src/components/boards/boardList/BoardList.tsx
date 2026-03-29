@@ -5,6 +5,8 @@ import { deleteBoard, getBoards } from "@/lib/boards";
 import { Board } from "@/types/board";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import BoardCard from "../boardCard/BoardCard";
+import styles from "./BoardList.module.css";
 
 export default function BoardList() {
   const [boards, setBoards] = useState<Board[]>([]);
@@ -32,22 +34,14 @@ export default function BoardList() {
   };
 
   return (
-    <section>
-      <div>
-        {boards.length === 0 ? (
-          <p>No tenes tableros guardados</p>
-        ) : (
-          boards.map((b: Board) => (
-            <div key={b.id}>
-              <p>{b.name}</p>
-              <button onClick={() => router.push(`/boards/${b.id}`)}>Ingresar</button>
-              <button onClick={() => handleDelete(b.id)}>
-                {loading ? "Borrando..." : "Borrar"}
-              </button>
-            </div>
-          ))
-        )}
-      </div>
+    <section className={styles.boards}>
+      {boards.length === 0 ? (
+        <p>No tenes tableros guardados</p>
+      ) : (
+        boards.map((b: Board) => (
+          <BoardCard key={b.id} board={b} onDelete={handleDelete} />
+        ))
+      )}
     </section>
   );
 }

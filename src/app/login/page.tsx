@@ -3,6 +3,7 @@
 import { useAuth } from "@/context/authContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import styles from "./Login.module.css";
 
 export default function LoginPage() {
   const { user, loading, loginWithGoogle } = useAuth();
@@ -15,16 +16,35 @@ export default function LoginPage() {
   }, [user, loading]);
 
   return (
-    <main className="min-h-screen bg-black">
-      <div className="flex min-h-screen flex-col items-center justify-center bg-black text-white">
-        <h1 className="text-4xl font-bold mb-2">Inkoed</h1>
-        <p className="text-gray-400 mb-8">Tu canvas de codigo</p>
-        <button
-          onClick={loginWithGoogle}
-          className="bg-white text-black px-6 py-3 rounded-lg font-medium hover:bg-gray-200 transition"
-        >
-          Entrar con google
-        </button>
+    <main className={styles.main}>
+      <div className={styles.container}>
+        <div className={styles.info}>
+          <h1 className={styles.title}>
+            Guardá y anotá tu código, <br /> sin el desorden.
+          </h1>
+          <p className={styles.subtitle}>Probá Inkode de forma gratuita</p>
+        </div>
+
+        <div className={styles.util}>
+          <div className={styles.login}>
+            <h2 className={styles.loginTitle}>Iniciar Sesión</h2>
+            <button onClick={loginWithGoogle} className={styles.btn}>
+              <img className={styles.logo} src="/logos/login.png" alt="Google" />
+              Entrar con google
+            </button>
+          </div>
+
+          <div className={styles.play}>
+            <video
+              className={styles.video}
+              src="https://res.cloudinary.com/dmdi9t777/video/upload/v1774819814/loginVideo_fppyqn.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+            />
+          </div>
+        </div>
       </div>
     </main>
   );
