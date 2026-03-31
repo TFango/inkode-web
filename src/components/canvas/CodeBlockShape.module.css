@@ -1,0 +1,48 @@
+.toolbar {
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  align-items: center;
+}
+
+/* SELECT */
+.select {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  outline: none;
+  transition: border 150ms ease, background 150ms ease;
+}
+
+.select:hover {
+  border-color: var(--color-accent);
+}
+
+.select:focus {
+  border-color: var(--color-accent);
+}
+
+/* BUTTON COPY */
+.copyBtn {
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 150ms ease, transform 100ms ease;
+}
+
+.copyBtn:hover {
+  background: var(--color-accent-hover);
+}
+
+.copyBtn:active {
+  transform: scale(0.97);
+}

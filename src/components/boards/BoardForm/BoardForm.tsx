@@ -39,19 +39,28 @@ export default function BoardForm() {
             <h3 className={style.title}>Crear tablero</h3>
 
             <input
-            className={style.input}
+              className={style.input}
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Nombre del tablero"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSubmit();
+              }}
             />
 
             <div className={style.buttons}>
-              <button onClick={handleSubmit} disabled={loading} className={style.create}>
+              <button
+                onClick={handleSubmit}
+                disabled={loading}
+                className={style.create}
+              >
                 {loading ? "Creando..." : "Crear"}
               </button>
 
-              <button className={style.cancel} onClick={() => setIsOpen(false)}>Cancelar</button>
+              <button className={style.cancel} onClick={() => setIsOpen(false)}>
+                Cancelar
+              </button>
             </div>
           </div>
         </div>

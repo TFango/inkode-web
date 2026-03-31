@@ -21,13 +21,15 @@ export default function Header({ variant }: Props) {
 
         {variant === "app" && (
           <nav className={styles.nav}>
-            <a className={styles.link} href="#">
+            <a className={styles.link} href="/feedback">
               Feedback
             </a>
-            <a className={styles.link} href="#">
-              ¿Qué es Inkode?
+            <a className={styles.link} href="/account">
+              Cuenta
             </a>
-            <button className={styles.link} onClick={logout}>Cerrar sesión</button>
+            <button className={styles.logoutBtn} onClick={logout}>
+              Cerrar sesión
+            </button>
           </nav>
         )}
       </div>

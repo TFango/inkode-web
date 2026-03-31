@@ -5,13 +5,13 @@ import "tldraw/tldraw.css";
 import { useAuth } from "@/context/authContext";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import CanvasPesistence from "../canvas/CanvasPesistence";
-import { CodeBlockShapeUtil } from "../canvas/CodeBlockShape";
-import AddCodeBlockButton from "../canvas/AddCodeBlockButton";
+import CanvasPesistence from "./CanvasPesistence";
+import { CodeBlockShapeUtil } from "./CodeBlockShape";
+import AddCodeBlockButton from "./AddCodeBlockButton";
 import { ModeProvider } from "@/context/modeContext";
-import { ModeToggleButton } from "../canvas/ModeToggleButton";
-import ModeController from "../canvas/ModeController";
-import KeyboardBlocker from "../canvas/KeyboardBlocker";
+import { ModeToggleButton } from "./ModeToggleButton";
+import ModeController from "./ModeController";
+import KeyboardBlocker from "./KeyboardBlocker";
 import { useMode } from "@/context/modeContext";
 import { DefaultToolbar } from "tldraw";
 
@@ -74,5 +74,3 @@ function ConditionalToolbar() {
   if (mode === "code") return null;
   return <DefaultToolbar />;
 }
-
-

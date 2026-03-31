@@ -13,6 +13,8 @@ import {
   useEditor,
 } from "tldraw";
 
+import styles from "./CodeBlockShape.module.css";
+
 declare module "tldraw" {
   interface TLShapeUtilMap {
     "code-block": CodeBlockShapeUtil;
@@ -131,8 +133,12 @@ export function CodeBlockContent({ shape }: { shape: CodeBlockShape }) {
         pointerEvents: isCodeMode ? "all" : "none",
       }}
     >
-      <div style={{ display: "flex", gap: 8, padding: 8 }}>
-        <select value={shape.props.language} onChange={handleLanguageChange}>
+      <div className={styles.toolbar}>
+        <select
+          value={shape.props.language}
+          onChange={handleLanguageChange}
+          className={styles.select}
+        >
           <option value="javascript">JavaScript</option>
           <option value="typescript">TypeScript</option>
           <option value="python">Python</option>
@@ -141,6 +147,7 @@ export function CodeBlockContent({ shape }: { shape: CodeBlockShape }) {
           <option value="css">CSS</option>
         </select>
         <button
+          className={styles.copyBtn}
           onPointerDown={(e) => {
             e.stopPropagation();
             e.preventDefault();

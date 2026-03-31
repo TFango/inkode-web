@@ -1,4 +1,4 @@
-import BoardCanvas from "@/components/boards/BoardCanvas";
+import BoardCanvas from "@/components/canvas/BoardCanvas";
 
 type Params = {
   params: Promise<{ boardId: string }>;

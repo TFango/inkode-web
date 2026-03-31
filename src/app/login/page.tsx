@@ -20,30 +20,36 @@ export default function LoginPage() {
       <div className={styles.container}>
         <div className={styles.info}>
           <h1 className={styles.title}>
-            Guardá y anotá tu código, <br /> sin el desorden.
+            Guardá, organizá y visualizá <br />
+            tu código en un solo lugar
           </h1>
-          <p className={styles.subtitle}>Probá Inkode de forma gratuita</p>
+
+          <p className={styles.subtitle}>
+            Dejá de perder tiempo buscando snippets. Tené todo organizado y
+            accesible.
+          </p>
+
+          <ul className={styles.list}>
+            <li>Organizá código en tableros</li>
+            <li>Visualizá relaciones en canvas</li>
+            <li>Accedé rápido a todo</li>
+          </ul>
+
+          <button onClick={loginWithGoogle} className={styles.btn}>
+            <img className={styles.logo} src="/logos/login.png" alt="Google" />
+            Empezar gratis con Google
+          </button>
         </div>
 
-        <div className={styles.util}>
-          <div className={styles.login}>
-            <h2 className={styles.loginTitle}>Iniciar Sesión</h2>
-            <button onClick={loginWithGoogle} className={styles.btn}>
-              <img className={styles.logo} src="/logos/login.png" alt="Google" />
-              Entrar con google
-            </button>
-          </div>
-
-          <div className={styles.play}>
-            <video
-              className={styles.video}
-              src="https://res.cloudinary.com/dmdi9t777/video/upload/v1774819814/loginVideo_fppyqn.mp4"
-              autoPlay
-              loop
-              muted
-              playsInline
-            />
-          </div>
+        <div className={styles.play}>
+          <video
+            className={styles.video}
+            src="https://res.cloudinary.com/dmdi9t777/video/upload/v1774819814/loginVideo_fppyqn.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+          />
         </div>
       </div>
     </main>

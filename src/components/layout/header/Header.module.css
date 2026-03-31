@@ -33,14 +33,34 @@
 }
 
 .link {
-  color: #fff;
-
-  font-family: Inter;
-  font-size: 1rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
   text-decoration: none;
-  background: none;
-  border: none;
+  transition: color 150ms ease;
+}
+
+.link:hover {
+  color: var(--color-text);
+}
+
+/* botón logout */
+.logoutBtn {
+  padding: 0.5rem 0.9rem;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-danger);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.logoutBtn:hover {
+  background: var(--color-danger);
+  color: #fff;
+  border-color: var(--color-danger);
+}
+
+.logoutBtn:active {
+  transform: scale(0.96);
 }
