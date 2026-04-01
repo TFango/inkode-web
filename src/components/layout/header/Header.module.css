@@ -12,14 +12,12 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .logo {
-  font-family: Inter;
   font-size: 2.25rem;
-  font-style: normal;
   font-weight: 700;
-  line-height: normal;
   color: inherit;
   text-decoration: none;
 }
@@ -28,8 +26,6 @@
   display: flex;
   align-items: center;
   gap: 24px;
-  font-size: 0.9rem;
-  color: var(--color-text-secondary);
 }
 
 .link {
@@ -43,7 +39,60 @@
   color: var(--color-text);
 }
 
-/* botón logout */
+.linkActive {
+  color: var(--color-text);
+}
+
+/* Avatar */
+
+.avatarLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  overflow: hidden;
+  transition: border-color 150ms ease;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.avatarLink:hover {
+  border-color: var(--color-text-secondary);
+}
+
+.avatarLinkActive {
+  border-color: var(--color-accent);
+}
+
+.avatarLinkActive:hover {
+  border-color: var(--color-accent);
+}
+
+.avatarImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.avatarInitial {
+  width: 100%;
+  height: 100%;
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+/* Botón logout */
+
 .logoutBtn {
   padding: 0.5rem 0.9rem;
   border-radius: 6px;

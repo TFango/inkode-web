@@ -21,12 +21,12 @@
 }
 
 .emptyTitle {
-  font-size: 1rem;
+  font-size: 1.5rem;
   font-weight: 500;
   color: var(--color-text-secondary);
 }
 
 .emptySubtitle {
-  font-size: 0.875rem;
+  font-size: 1rem;
   color: var(--color-border);
 }
