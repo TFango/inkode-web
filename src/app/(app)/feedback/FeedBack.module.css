@@ -118,6 +118,34 @@
   border: none;
 }
 
-.btn:hover {
+.btn:hover:not(:disabled) {
   background: var(--color-accent-hover);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.successBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  align-self: stretch;
+}
+
+.successText {
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.errorText {
+  font-size: 0.875rem;
+  color: var(--color-danger);
+  text-align: center;
 }
