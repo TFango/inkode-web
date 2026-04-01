@@ -2,7 +2,7 @@
 
 import { useAuth } from "@/context/authContext";
 import { createBoard } from "@/lib/boards";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import style from "./BoardForm.module.css";
 
 export default function BoardForm() {
@@ -10,6 +10,25 @@ export default function BoardForm() {
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useAuth();
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    inputRef.current?.focus();
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") close();
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen]);
+
+  const close = () => {
+    setIsOpen(false);
+    setName("");
+  };
 
   const handleSubmit = async () => {
     if (!user || !name.trim()) return;
@@ -18,8 +37,7 @@ export default function BoardForm() {
 
     try {
       await createBoard({ name, userId: user.uid });
-      setName("");
-      setIsOpen(false);
+      close();
     } catch (err) {
       console.error("Error al guardar: ", err);
     } finally {
@@ -34,11 +52,12 @@ export default function BoardForm() {
       </button>
 
       {isOpen && (
-        <div className={style.window}>
-          <div className={style.container}>
+        <div className={style.window} onClick={close}>
+          <div className={style.container} onClick={(e) => e.stopPropagation()}>
             <h3 className={style.title}>Crear tablero</h3>
 
             <input
+              ref={inputRef}
               className={style.input}
               type="text"
               value={name}
@@ -58,7 +77,7 @@ export default function BoardForm() {
                 {loading ? "Creando..." : "Crear"}
               </button>
 
-              <button className={style.cancel} onClick={() => setIsOpen(false)}>
+              <button className={style.cancel} onClick={close}>
                 Cancelar
               </button>
             </div>

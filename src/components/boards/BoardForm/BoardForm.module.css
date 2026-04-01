@@ -44,15 +44,10 @@
 }
 
 .title {
-  color: #fff;
+  color: var(--color-text);
   text-align: center;
-
-  /* Titulos */
-  font-family: Inter;
-  font-size: 2.25rem;
-  font-style: normal;
+  font-size: 1.25rem;
   font-weight: 700;
-  line-height: normal;
 }
 
 .input {

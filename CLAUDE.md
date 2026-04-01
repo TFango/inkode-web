@@ -224,7 +224,6 @@ if (!user) return null
 
 ## Pendiente
 
-- [ ] Solucionar persistencia del canvas al navegar con flecha atrás del browser
 - [ ] Landing page pública
 - [ ] Deploy en Vercel
 - [ ] Registrar dominio (inkode.app o inkode.dev)
