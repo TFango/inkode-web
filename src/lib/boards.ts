@@ -70,12 +70,8 @@ export async function saveBoardCanvas(
   boardId: string,
   snapshot: unknown,
 ): Promise<void> {
-  const ref = doc(db, "boards", boardId); // Referencia al documento del tablero
-
-
-  // Guarda el snapshot en el campo "canvas"
-  // merge: true -> Evita sobreescribir otros campos como name o userId
-  await setDoc(ref, { canvas: snapshot }, { merge: true });
+  const ref = doc(db, "boards", boardId);
+  await setDoc(ref, { canvas: snapshot, canvasSavedAt: Date.now() }, { merge: true });
 }
 
 
@@ -83,13 +79,13 @@ export async function saveBoardCanvas(
 
 export async function loadBoardCanvas(
   boardId: string,
-): Promise<unknown | null> {
-  const ref = await getDoc(doc(db, "boards", boardId)); // Busca el documento del tablero
+): Promise<{ snapshot: unknown; savedAt: number } | null> {
+  const ref = await getDoc(doc(db, "boards", boardId));
 
-  if (!ref.exists()) { // Si no existe retorna null
-    return null;
-  }
+  if (!ref.exists()) return null;
 
-  // Devuelve el campo canvas si existe
-  return ref.data()?.canvas ?? null;
+  const data = ref.data();
+  if (!data?.canvas) return null;
+
+  return { snapshot: data.canvas, savedAt: data.canvasSavedAt ?? 0 };
 }
