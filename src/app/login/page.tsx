@@ -21,7 +21,7 @@ export default function LoginPage() {
         <span>Creado por Emanuel Bustos</span>
         <div className={styles.footerLinks}>
           <a
-            href="www.linkedin.com/in/facundo-emanuel-jimenez-bustos-49207136b"
+            href="https://www.linkedin.com/in/facundo-emanuel-jimenez-bustos-49207136b/?skipRedirect=true"
             target="_blank"
             rel="noopener noreferrer"
             className={styles.footerLink}
@@ -65,7 +65,7 @@ export default function LoginPage() {
         <div className={styles.play}>
           <video
             className={styles.video}
-            src="https://res.cloudinary.com/dmdi9t777/video/upload/v1774819814/loginVideo_fppyqn.mp4"
+            src="https://res.cloudinary.com/dmdi9t777/video/upload/q_auto/f_auto/v1775146630/Video_Project_1_rwhgro.mp4"
             autoPlay
             loop
             muted
