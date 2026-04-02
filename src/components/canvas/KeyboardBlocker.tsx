@@ -1,28 +1,30 @@
 "use client";
 
 import { useEffect } from "react";
-import { useMode } from "@/context/modeContext";
+import { useEditor } from "tldraw";
 
 export default function KeyboardBlocker() {
-  const { mode } = useMode();
+  const editor = useEditor();
 
   useEffect(() => {
+    const container = editor.getContainer();
+
     const handler = (e: KeyboardEvent) => {
-      const target = e.target as HTMLElement;
-      const isInsideMonaco = target?.closest(".monaco-editor") !== null;
+      const active = document.activeElement;
+      const isInsideMonaco = active?.closest(".monaco-editor") !== null;
       if (isInsideMonaco) {
-        e.stopPropagation();
+        e.stopImmediatePropagation();
       }
     };
 
-    window.addEventListener("keydown", handler, true);
-    window.addEventListener("keyup", handler, true);
+    container.addEventListener("keydown", handler, true);
+    container.addEventListener("keyup", handler, true);
 
     return () => {
-      window.removeEventListener("keydown", handler, true);
-      window.removeEventListener("keyup", handler, true);
+      container.removeEventListener("keydown", handler, true);
+      container.removeEventListener("keyup", handler, true);
     };
-  }, [mode]);
+  }, [editor]);
 
   return null;
 }

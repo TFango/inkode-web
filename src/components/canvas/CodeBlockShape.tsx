@@ -51,6 +51,7 @@ import {
   ShapeUtil,
   TLBaseShape,
   TLGeometryOpts,
+  TLResizeInfo,
   T,
   useEditor,
 } from "tldraw";
@@ -68,6 +69,7 @@ declare module "tldraw" {
       h: number;
       code: string;
       language: string;
+      userResized: boolean;
     };
   }
 }
@@ -77,6 +79,7 @@ type CodeBlockShapeProps = {
   h: number;
   code: string;
   language: string;
+  userResized: boolean;
 };
 
 export type CodeBlockShape = TLBaseShape<"code-block", CodeBlockShapeProps>;
@@ -89,10 +92,11 @@ export class CodeBlockShapeUtil extends ShapeUtil<CodeBlockShape> {
     h: T.number,
     code: T.string,
     language: T.string,
+    userResized: T.boolean,
   };
 
   getDefaultProps(): CodeBlockShapeProps {
-    return { w: 500, h: 300, code: "", language: "javascript" };
+    return { w: 500, h: 300, code: "", language: "javascript", userResized: false };
   }
 
   getGeometry(shape: CodeBlockShape, opts?: TLGeometryOpts): Geometry2d {
@@ -105,6 +109,20 @@ export class CodeBlockShapeUtil extends ShapeUtil<CodeBlockShape> {
 
   override canResize() {
     return true;
+  }
+
+  override canBind() {
+    return false;
+  }
+
+  override onResize(shape: CodeBlockShape, info: TLResizeInfo<CodeBlockShape>) {
+    return {
+      props: {
+        w: Math.max(200, shape.props.w * info.scaleX),
+        h: Math.max(100, shape.props.h * info.scaleY),
+        userResized: true,
+      },
+    };
   }
 
   component(shape: CodeBlockShape) {
@@ -144,13 +162,28 @@ export function CodeBlockContent({ shape }: { shape: CodeBlockShape }) {
     };
   }, []);
 
+  const LINE_HEIGHT = 19;
+  const TOOLBAR_HEIGHT = 40;
+  const MIN_LINES = 5;
+  const PADDING = 16;
+  const CHAR_WIDTH = 7.8; // ancho aprox de un caracter en JetBrains Mono 14px
+  const MIN_WIDTH = 500;
+
   const handleCodeChange = (value: string | undefined) => {
     const code = value || "";
     const detected = detectLanguage(code);
+    const lines = Math.max(MIN_LINES, code.split("\n").length);
+    const autoH = lines * LINE_HEIGHT + TOOLBAR_HEIGHT + PADDING;
+    const longestLine = Math.max(...code.split("\n").map((l) => l.length));
+    const autoW = Math.max(MIN_WIDTH, longestLine * CHAR_WIDTH + PADDING * 2);
     editor.updateShape({
       id: shape.id,
       type: "code-block",
-      props: { code, ...(detected ? { language: detected } : {}) },
+      props: {
+        code,
+        ...(shape.props.userResized ? {} : { h: autoH, w: autoW }),
+        ...(detected ? { language: detected } : {}),
+      },
     });
   };
 
@@ -169,6 +202,8 @@ export function CodeBlockContent({ shape }: { shape: CodeBlockShape }) {
   return (
     <div
       onPointerDown={(e) => e.stopPropagation()}
+      onKeyDown={(e) => e.stopPropagation()}
+      onKeyUp={(e) => e.stopPropagation()}
       style={{
         width: "100%",
         height: "100%",
@@ -215,6 +250,7 @@ export function CodeBlockContent({ shape }: { shape: CodeBlockShape }) {
         language={shape.props.language}
         theme="vs-dark"
         onChange={handleCodeChange}
+
         options={{
           readOnly: !isCodeMode,
           minimap: { enabled: false },

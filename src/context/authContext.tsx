@@ -32,7 +32,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const loginWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (error: any) {
+      if (error?.code === "auth/popup-closed-by-user") return;
+      throw error;
+    }
   };
 
   const logout = async () => {
