@@ -17,6 +17,27 @@ export default function LoginPage() {
 
   return (
     <main className={styles.main}>
+      <footer className={styles.footer}>
+        <span>Creado por Emanuel Bustos</span>
+        <div className={styles.footerLinks}>
+          <a
+            href="www.linkedin.com/in/facundo-emanuel-jimenez-bustos-49207136b"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.footerLink}
+          >
+            LinkedIn
+          </a>
+          <a
+            href="https://github.com/TFango/inkode-web"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.footerLink}
+          >
+            GitHub
+          </a>
+        </div>
+      </footer>
       <div className={styles.container}>
         <div className={styles.info}>
           <h1 className={styles.title}>
