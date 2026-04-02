@@ -48,7 +48,7 @@ export default function BoardForm() {
   return (
     <section>
       <button className={style.newBoard} onClick={() => setIsOpen(true)}>
-        Nuevo board
+        Nuevo tablero
       </button>
 
       {isOpen && (

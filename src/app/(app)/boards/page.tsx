@@ -7,6 +7,13 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import styles from "./Boards.module.css";
 
+function getGreeting() {
+  const hour = new Date().getHours();
+  if (hour >= 6 && hour < 12) return "Buenos días";
+  if (hour >= 12 && hour < 19) return "Buenas tardes";
+  return "Buenas noches";
+}
+
 export default function BoardsPage() {
   const { user, loading, logout } = useAuth();
   const router = useRouter();
@@ -24,7 +31,7 @@ export default function BoardsPage() {
       <div className={styles.container}>
 
         <div className={styles.info}>
-          <h1 className={styles.title}>Bienvenido de vuelta, {user?.displayName}</h1>
+          <h1 className={styles.title}>{getGreeting()}, {user?.displayName}</h1>
 
           <BoardForm />
         </div>

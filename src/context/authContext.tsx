@@ -4,9 +4,11 @@ import {
   GoogleAuthProvider,
   signOut,
   signInWithPopup,
+  getAdditionalUserInfo,
   User,
   onAuthStateChanged,
 } from "firebase/auth";
+import { createBoard } from "@/lib/boards";
 import { createContext, useContext, useEffect, useState } from "react";
 
 type AuthContextType = {
@@ -33,7 +35,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const loginWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
+      const isNewUser = getAdditionalUserInfo(result)?.isNewUser;
+      if (isNewUser) {
+        await createBoard({ name: "Mi primer tablero", userId: result.user.uid });
+      }
     } catch (error: any) {
       if (error?.code === "auth/popup-closed-by-user") return;
       throw error;
