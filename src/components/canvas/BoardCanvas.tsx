@@ -33,6 +33,7 @@ export default function BoardCanvas({ boardId }: { boardId: string }) {
     <div className="tldraw__editor" style={{ width: "100vw", height: "100vh" }}>
       <ModeProvider value={{ mode, setMode }}>
         <Tldraw
+          licenseKey={process.env.NEXT_PUBLIC_TLDRAW_LICENSE_KEY}
           shapeUtils={shapeUtils}
           inferDarkMode
           components={{
