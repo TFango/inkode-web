@@ -229,5 +229,3 @@ if (!user) return null
 - [ ] Registrar dominio (inkode.app o inkode.dev)
 - [ ] Conectar formulario de Feedback con Resend (requiere dominio)
 - [ ] Login con email/contraseña (baja prioridad, post-lanzamiento)
-- [ ] Detección automática de lenguaje en bloques
-- [ ] Modo selección múltiple para copiar varios bloques (evaluar con usuarios)

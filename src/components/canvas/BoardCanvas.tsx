@@ -36,6 +36,7 @@ export default function BoardCanvas({ boardId }: { boardId: string }) {
           shapeUtils={shapeUtils}
           inferDarkMode
           components={{
+            PageMenu: null,
             Toolbar: ConditionalToolbar,
             InFrontOfTheCanvas: () => (
               <>
