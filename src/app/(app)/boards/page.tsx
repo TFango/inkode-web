@@ -3,8 +3,10 @@
 import BoardForm from "@/components/boards/BoardForm/BoardForm";
 import BoardList from "@/components/boards/boardList/BoardList";
 import { useAuth } from "@/context/authContext";
+import { getBoards } from "@/lib/boards";
+import { Board } from "@/types/board";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styles from "./Boards.module.css";
 
 function getGreeting() {
@@ -15,29 +17,40 @@ function getGreeting() {
 }
 
 export default function BoardsPage() {
-  const { user, loading, logout } = useAuth();
+  const { user, loading } = useAuth();
   const router = useRouter();
+  const [boards, setBoards] = useState<Board[]>([]);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    if (!loading && !user) {
-      router.push("/login");
-    }
+    if (!loading && !user) router.push("/login");
   }, [user, loading]);
+
+  useEffect(() => {
+    if (!user) return;
+    getBoards(user.uid).then((data) => {
+      setBoards(data);
+      setReady(true);
+    });
+  }, [user]);
+
+  const refresh = () => {
+    if (!user) return;
+    getBoards(user.uid).then(setBoards);
+  };
 
   if (loading) return <p>Cargando...</p>;
 
   return (
     <main className={styles.hero}>
       <div className={styles.container}>
-
         <div className={styles.info}>
           <h1 className={styles.title}>{getGreeting()}, {user?.displayName}</h1>
-
-          <BoardForm />
+          <BoardForm onCreated={refresh} />
         </div>
 
         <div className={styles.list}>
-          <BoardList />
+          <BoardList boards={boards} ready={ready} onDeleted={refresh} />
         </div>
       </div>
     </main>

@@ -166,7 +166,7 @@ export function CodeBlockContent({ shape }: { shape: CodeBlockShape }) {
   const TOOLBAR_HEIGHT = 40;
   const MIN_LINES = 5;
   const PADDING = 16;
-  const CHAR_WIDTH = 7.8; // ancho aprox de un caracter en JetBrains Mono 14px
+  const CHAR_WIDTH = 7.8;
   const MIN_WIDTH = 500;
 
   const handleCodeChange = (value: string | undefined) => {

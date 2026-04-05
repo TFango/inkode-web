@@ -5,7 +5,7 @@ import { createBoard } from "@/lib/boards";
 import { useEffect, useRef, useState } from "react";
 import style from "./BoardForm.module.css";
 
-export default function BoardForm() {
+export default function BoardForm({ onCreated }: { onCreated: () => void }) {
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -37,6 +37,7 @@ export default function BoardForm() {
 
     try {
       await createBoard({ name, userId: user.uid });
+      onCreated();
       close();
     } catch (err) {
       console.error("Error al guardar: ", err);

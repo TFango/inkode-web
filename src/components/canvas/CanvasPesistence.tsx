@@ -12,36 +12,36 @@ export default function CanvasPesistence({ boardId }: { boardId: string }) {
   const editor = useEditor();
 
   useEffect(() => {
-    let timeout: NodeJS.Timeout;
-
+    let localTimeout: NodeJS.Timeout;
     let loaded = false;
 
-    const save = () => {
+    const saveLocal = () => {
       if (!loaded) return;
       const snapshot = getSnapshot(editor.store);
       const savedAt = Date.now();
-
       try {
         const backup: LocalBackup = { snapshot, savedAt };
         localStorage.setItem(getLocalKey(boardId), JSON.stringify(backup));
       } catch {}
+    };
 
+    const saveFirestore = () => {
+      if (!loaded) return;
+      const snapshot = getSnapshot(editor.store);
       saveBoardCanvas(boardId, snapshot);
     };
 
+    // Carga inicial: localStorage vs Firestore, gana el más reciente
     let local: LocalBackup | null = null;
     try {
       const raw = localStorage.getItem(getLocalKey(boardId));
       local = raw ? (JSON.parse(raw) as LocalBackup) : null;
-    } catch {
-      // Corrupted entry — ignore
-    }
+    } catch {}
 
     loadBoardCanvas(boardId)
       .then((firestoreData) => {
         let snapshot: unknown = null;
         if (local && firestoreData) {
-          // Both exist: use the one saved most recently
           snapshot =
             local.savedAt >= firestoreData.savedAt
               ? local.snapshot
@@ -52,40 +52,41 @@ export default function CanvasPesistence({ boardId }: { boardId: string }) {
         if (snapshot) loadSnapshot(editor.store, snapshot as any);
       })
       .catch(() => {
-        // Network error: fall back to localStorage
         if (local?.snapshot) loadSnapshot(editor.store, local.snapshot as any);
       })
       .finally(() => {
         loaded = true;
       });
 
+    // localStorage: se guarda con debounce de 500ms mientras edita
     const unsubscribe = editor.store.listen(() => {
       if (!loaded) return;
-      clearTimeout(timeout);
-      timeout = setTimeout(save, 500);
+      clearTimeout(localTimeout);
+      localTimeout = setTimeout(saveLocal, 500);
     });
 
-    const handleHide = () => {
-      clearTimeout(timeout);
-      save();
+    // Firestore: solo al salir del canvas
+    const handleExit = () => {
+      clearTimeout(localTimeout);
+      saveLocal();
+      saveFirestore();
     };
 
     const handleVisibilityChange = () => {
-      if (document.visibilityState === "hidden") handleHide();
+      if (document.visibilityState === "hidden") handleExit();
     };
 
     document.addEventListener("visibilitychange", handleVisibilityChange);
-    window.addEventListener("beforeunload", handleHide);
-    // pagehide fires more reliably than beforeunload for back/forward navigation
-    window.addEventListener("pagehide", handleHide);
+    window.addEventListener("beforeunload", handleExit);
+    window.addEventListener("pagehide", handleExit);
 
     return () => {
       unsubscribe();
-      clearTimeout(timeout);
+      clearTimeout(localTimeout);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
-      window.removeEventListener("beforeunload", handleHide);
-      window.removeEventListener("pagehide", handleHide);
-      save();
+      window.removeEventListener("beforeunload", handleExit);
+      window.removeEventListener("pagehide", handleExit);
+      handleExit();
     };
   }, [boardId]);
 

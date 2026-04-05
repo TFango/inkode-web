@@ -1,30 +1,21 @@
 "use client";
 
-import { useAuth } from "@/context/authContext";
-import { deleteBoard, getBoards } from "@/lib/boards";
+import { deleteBoard } from "@/lib/boards";
 import { Board } from "@/types/board";
-import { useEffect, useState } from "react";
 import BoardCard from "../boardCard/BoardCard";
 import styles from "./BoardList.module.css";
 
-export default function BoardList() {
-  const [boards, setBoards] = useState<Board[]>([]);
-  const [ready, setReady] = useState(false);
-  const { user } = useAuth();
+type Props = {
+  boards: Board[];
+  ready: boolean;
+  onDeleted: () => void;
+};
 
-  useEffect(() => {
-    if (!user) return;
-    const unsubscribe = getBoards(user.uid, (data) => {
-      setBoards(data);
-      setReady(true);
-    });
-
-    return () => unsubscribe();
-  }, [user]);
-
+export default function BoardList({ boards, ready, onDeleted }: Props) {
   const handleDelete = async (id: string) => {
     try {
       await deleteBoard(id);
+      onDeleted();
     } catch (err) {
       console.error("Error al borrar el tablero", err);
     }

@@ -4,7 +4,7 @@ import {
   addDoc,
   query,
   where,
-  onSnapshot,
+  getDocs,
   deleteDoc,
   doc,
   setDoc,
@@ -36,23 +36,10 @@ export async function createBoard(data: {
 
 // OBTENER TABLEROS DEL USUARIO
 
-export function getBoards(userId: string, callback: (boards: Board[]) => void) {
-  // Query para traer solo los tableros del usuario actual
+export async function getBoards(userId: string): Promise<Board[]> {
   const q = query(collection(db, "boards"), where("userId", "==", userId));
-
-  //Listener en tiempo real
-  // onSnapshot -> Crea una conexion en tiempo real que notifica cada cambio
-  const unsubscribe = onSnapshot(q, (snap) => {
-    // Convierte cada documento en un objeto usable
-    const boards = snap.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-
-    callback(boards as Board[]); // Devuelve los datos al componente
-  });
-
-  return unsubscribe; // Retorna funcion para cortar la subscripcion, necesaria para cuando el componente se desmonta
+  const snap = await getDocs(q);
+  return snap.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Board[];
 }
 
 // ELIMINAR TABLERO
