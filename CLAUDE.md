@@ -17,13 +17,14 @@ Inkode es una herramienta web para developers que permite guardar y anotar bloqu
 
 | Capa | Tecnología |
 |---|---|
-| Frontend | Next.js 15 + TypeScript |
+| Frontend | Next.js 16 + TypeScript |
 | Estilos | CSS Modules (NO Tailwind) |
-| Canvas | tldraw |
+| Canvas | tldraw v4 (licencia trial 100 días) |
 | Editor de código | Monaco Editor (`@monaco-editor/react`) |
+| Detección de lenguaje | highlight.js (core, lenguajes populares) |
 | Auth | Firebase Auth (Google) |
 | Base de datos | Firebase Firestore |
-| Deploy | Vercel (pendiente) |
+| Deploy | Vercel — https://inkode-web.vercel.app |
 
 **Fuentes:** Inter (UI), JetBrains Mono (código)
 
@@ -51,6 +52,10 @@ src/
       boards/
         page.tsx          ← lista de tableros del usuario
         Boards.module.css
+      account/
+        page.tsx          ← perfil del usuario
+      feedback/
+        page.tsx          ← formulario de feedback
       layout.tsx          ← Header variant="app"
     (canvas)/
       boards/
@@ -64,13 +69,13 @@ src/
     page.tsx              ← redirect a /login
   components/
     boards/
-      BoardForm/          ← formulario crear tablero
+      BoardForm/          ← formulario crear tablero (llama onCreated al terminar)
       boardCard/          ← card individual con preview y botón eliminar
-      boardList/          ← lista de cards
+      boardList/          ← lista de cards (recibe boards/ready/onDeleted como props)
       BoardCanvas.tsx     ← componente cliente del canvas (hooks + tldraw)
     canvas/
       AddCodeBlockButton.tsx   ← botón agregar bloque (usa useEditor)
-      CanvasPesistence.tsx     ← carga y guarda el canvas en Firestore
+      CanvasPesistence.tsx     ← carga y guarda el canvas
       CodeBlockShape.tsx       ← custom shape de tldraw con Monaco Editor
       KeyboardBlocker.tsx      ← bloquea teclado dentro de Monaco
       ModeController.tsx       ← sincroniza modo con tldraw
@@ -79,17 +84,14 @@ src/
       header/
         Header.tsx         ← header con variante login/app
         Header.module.css
-    snippets/              ← componentes legacy, no se usan en el canvas actualmente
   context/
     authContext.tsx        ← AuthProvider + useAuth hook
     modeContext.tsx        ← ModeProvider + useMode hook
   lib/
     boards.ts             ← CRUD de tableros + saveBoardCanvas + loadBoardCanvas
     firebase.ts           ← inicialización de Firebase
-    snippets.ts           ← CRUD de snippets (legacy)
   types/
     board.ts              ← type Board
-    snippet.ts            ← type Snippet
 ```
 
 ---
@@ -97,9 +99,9 @@ src/
 ## Flujo Principal del Usuario
 
 ```
-Usuario entra a inkode.app
-  → Landing page (pendiente)
+Usuario entra a inkode-web.vercel.app
   → Login con Google → /boards
+  → Si es nuevo usuario: se crea "Mi primer tablero" automáticamente
   → Ve sus tableros como cards
   → Crea un tablero nuevo
   → Entra al tablero → /boards/[boardId]
@@ -107,7 +109,7 @@ Usuario entra a inkode.app
   → Modo código: escribe bloques de código con Monaco
   → Modo dibujo: dibuja flechas y texto encima del código
   → Cada bloque tiene botón Copiar (copia código limpio)
-  → El canvas se guarda automáticamente en Firestore
+  → El canvas se guarda en localStorage cada 500ms y en Firestore al salir
 ```
 
 ---
@@ -130,7 +132,9 @@ boards (colección)
 ## Decisiones Técnicas Importantes
 
 ### Auth
-- Solo Google por ahora via `GoogleAuthProvider` + `signInWithPopup`
+- Solo Google via `GoogleAuthProvider` + `signInWithPopup`
+- El error `auth/popup-closed-by-user` se ignora silenciosamente (es acción válida del usuario)
+- Si el usuario es nuevo (`getAdditionalUserInfo(result)?.isNewUser`), se crea un tablero default automáticamente
 - El estado global de auth vive en `AuthContext` — nunca llamar Firebase directamente desde componentes
 - `useAuth()` se importa siempre desde `@/context/authContext`
 
@@ -139,34 +143,44 @@ boards (colección)
 - `page.tsx` del canvas es un **server component** que hace `await params` y pasa `boardId` como prop
 - Los componentes que usan `useEditor()` deben vivir **dentro** del árbol de `<Tldraw>` via la prop `components`
 - Para registrar custom shapes: `shapeUtils={[CodeBlockShapeUtil]}` fuera del componente para evitar re-renders
+- `PageMenu: null` en components para deshabilitar la creación de múltiples páginas
+- La licencia de tldraw se pasa via `licenseKey={process.env.NEXT_PUBLIC_TLDRAW_LICENSE_KEY}`
 
 ### Custom Shape — CodeBlockShape
-- Usa `declare module "tldraw" { interface TLGlobalShapePropsMap {...} }` para registrar el tipo
-- El tipo se define con `TLShape<"code-block">` (NO `TLBaseShape`)
-- Las props usan validadores de tldraw: `T.number`, `T.string`
-- El JSX vive en `CodeBlockContent` (componente separado) para poder usar hooks
-- `onPointerDown={(e) => e.stopPropagation()}` es obligatorio para que Monaco reciba eventos
+- Props: `w`, `h`, `code`, `language`, `userResized` (boolean)
+- `userResized: true` desactiva el auto-resize cuando el usuario estira el bloque manualmente
+- `onResize` actualiza `w`, `h` y setea `userResized: true`
+- `canBind()` retorna `false` para evitar el efecto punteado cuando las flechas pasan por encima
+- El lenguaje se detecta automáticamente con `hljs.highlightAuto()` — mínimo 20 chars y relevance ≥ 5
+- Auto-resize: alto por cantidad de líneas (`LINE_HEIGHT = 19`), ancho por línea más larga (`CHAR_WIDTH = 7.8`)
+- `onKeyDown/onKeyUp` en el div raíz para intentar bloquear shortcuts de tldraw (limitado)
 
 ### Modos del canvas
 - `ModeContext` maneja el estado global del modo (`"code"` | `"draw"`)
 - `ModeController` cambia la herramienta activa de tldraw y oculta/muestra la toolbar
-- `KeyboardBlocker` solo bloquea eventos de teclado cuando el foco está **dentro de Monaco** (`.monaco-editor`)
+- `KeyboardBlocker` usa `stopImmediatePropagation` en el container de tldraw
 - Tecla `Q` mientras se mantiene presionada activa `pointerEvents: none` en el bloque para poder moverlo
 - En modo código: toolbar de tldraw oculta via `ConditionalToolbar`
 - En modo dibujo: toolbar de tldraw visible, Monaco en `readOnly: true`
 
 ### Persistencia del canvas
 - Se usa `getSnapshot(editor.store)` y `loadSnapshot(editor.store, snapshot)` (funciones importadas de tldraw, NO métodos del store)
-- Guardado con debounce de 1-2 segundos mientras trabaja
-- Guardado al cerrar/recargar via `beforeunload`
-- Guardado al navegar via `visibilitychange` (cuando la pestaña pasa a `hidden`)
-- Guardado en el cleanup del `useEffect`
+- **localStorage**: guardado cada 500ms con debounce mientras el usuario edita
+- **Firestore**: guardado solo al salir del canvas (`beforeunload`, `pagehide`, `visibilitychange`)
+- Al cargar: se compara `savedAt` de localStorage vs Firestore y se usa el más reciente
+- Este esquema minimiza escrituras a Firestore (plan gratuito Spark)
 
-### CSS
+### Firestore — optimización de lecturas
+- `getBoards` usa `getDocs` (una sola lectura) en lugar de `onSnapshot` (tiempo real)
+- El estado de boards vive en `BoardsPage` y se pasa como props a `BoardList` y `BoardForm`
+- La lista se recarga llamando a `refresh()` después de crear o borrar un tablero
+
+### CSS — Responsive
 - CSS Modules para todas las pantallas (NO Tailwind)
 - Siempre usar variables CSS (`var(--color-accent)`) en lugar de colores hardcodeados
-- `font-family` no se repite en cada clase — se hereda del `globals.css`
-- Bordes redondeados máximo `border-radius: 12-16px`
+- Breakpoints definidos: 1280px, 1366px, 1440px, 1920px (base), 2560px
+- Solo desktop — no hay soporte para mobile ni tablet
+- No tiene modo claro (solo dark)
 
 ---
 
@@ -191,13 +205,12 @@ export function useAuth() {
 }
 ```
 
-### Patrón de suscripción Firestore
+### Patrón de lectura Firestore (una sola vez)
 ```typescript
 useEffect(() => {
   if (!user) return
-  const unsubscribe = getBoards(user.uid, (data) => setBoards(data))
-  return () => unsubscribe() // cleanup obligatorio
-}, [user]) // [user] como dependencia, NUNCA [boards]
+  getBoards(user.uid).then((data) => setBoards(data))
+}, [user])
 ```
 
 ### Patrón de componente de página protegida
@@ -217,7 +230,7 @@ if (!user) return null
 - No es un IDE ni reemplaza VS Code
 - No ejecuta código
 - No es para compartir código públicamente (por ahora)
-- No tiene responsive/mobile (solo desktop)
+- No tiene responsive/mobile (solo desktop, mínimo 1280px)
 - No tiene modo claro (solo dark)
 
 ---
@@ -225,7 +238,7 @@ if (!user) return null
 ## Pendiente
 
 - [ ] Landing page pública
-- [ ] Deploy en Vercel
 - [ ] Registrar dominio (inkode.app o inkode.dev)
 - [ ] Conectar formulario de Feedback con Resend (requiere dominio)
 - [ ] Login con email/contraseña (baja prioridad, post-lanzamiento)
+- [ ] Resolver bug de teclado en Monaco (Delete, Tab, flechas interceptados por tldraw)
