@@ -23,6 +23,13 @@ export default function Header({ variant }: Props) {
         {variant === "app" && (
           <nav className={styles.nav}>
             <Link
+              className={`${styles.link} ${pathname === "/actualizaciones" ? styles.linkActive : ""}`}
+              href="/actualizaciones"
+            >
+              Novedades
+            </Link>
+
+            <Link
               className={`${styles.link} ${pathname === "/feedback" ? styles.linkActive : ""}`}
               href="/feedback"
             >
