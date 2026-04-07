@@ -1,30 +1,52 @@
-# Inkode
+<div align="center">
 
-**Guardá, organizá y visualizá tu código en un solo lugar.**
+# 🖊️ Inkode
 
-Inkode es una herramienta web para developers que permite guardar y anotar bloques de código en un **canvas infinito**, similar a Figma o n8n. La diferencia clave con otras herramientas es que las anotaciones viven en una **capa separada** del código, por lo que el código siempre se puede copiar limpio.
+### Canvas infinito para guardar y anotar código — sin ensuciar el código.
+
+[![Next.js](https://img.shields.io/badge/Next.js_16-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com)
+[![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com)
+
+**[🚀 Ver demo en vivo](https://inkode-web.vercel.app)** · **[🐛 Reportar un bug](https://github.com/TFango/inkode-web/issues)** · **[💡 Sugerir una feature](https://github.com/TFango/inkode-web/issues)**
+
+![Estado](https://img.shields.io/badge/estado-en%20desarrollo%20activo-F59E0B?style=flat-square)
+![Commits](https://img.shields.io/github/commit-activity/m/TFango/inkode-web?style=flat-square&label=commits%2Fmes&color=10B981)
+
+</div>
 
 ---
 
-## ¿Por qué Inkode?
+## ¿Qué es Inkode?
 
-| Problema | Solución |
+Inkode es una herramienta web para developers que permite guardar y anotar bloques de código en un **canvas infinito**, similar a Figma o n8n.
+
+La diferencia clave con cualquier otra herramienta: **las anotaciones viven en una capa separada del código**, por lo que el código siempre se puede copiar limpio — sin importar cuántas flechas o notas tenga encima.
+
+---
+
+## ¿Por qué no uso Notion o Gist?
+
+| Herramienta | Problema |
 |---|---|
-| Guardar código en Notion lo ensucia con las anotaciones | Capa de anotaciones separada del código |
-| GitHub Gist es lento y no tiene canvas | Canvas infinito con navegación fluida |
-| No hay herramienta que combine canvas + código | Inkode combina ambos en una sola app |
+| 📝 Notion | Las anotaciones se mezclan con el código |
+| 📎 GitHub Gist | Sin canvas, navegación lenta, sin contexto visual |
+| 🗂️ Cualquier lista | El código sin contexto espacial pierde significado |
+| ✅ **Inkode** | **Canvas + código + anotaciones en capas separadas** |
 
 ---
 
 ## Features
 
-- **Canvas infinito** — organizá tus bloques de código libremente en el espacio
-- **Editor de código** con syntax highlighting (Monaco Editor, el mismo de VS Code)
-- **Detección automática de lenguaje** — reconoce JS, TS, Python, Go, Rust, SQL, y más
-- **Dos modos**: modo código para escribir, modo dibujo para anotar con flechas y texto
-- **Copia limpia** — el botón Copiar siempre te da el código sin las anotaciones
-- **Persistencia automática** — el canvas se guarda en tiempo real en Firestore
-- **Auth con Google** — accedé con un click, sin registro manual
+- 🗺️ **Canvas infinito** — organizá tus bloques libremente en el espacio
+- ⌨️ **Monaco Editor** — el mismo editor que VS Code, con syntax highlighting
+- 🔍 **Detección automática de lenguaje** — JS, TS, Python, Go, Rust, SQL y más
+- 🖊️ **Modo dibujo** — anotá con flechas, texto y formas encima del código
+- 📋 **Copia limpia garantizada** — el botón Copiar ignora las anotaciones
+- 💾 **Guardado automático** — persistencia en tiempo real con Firestore
+- 🔐 **Auth con Google** — accedé con un click, sin registro manual
+- 📁 **Tableros** — organizá tu código por proyecto, curso o tema
 
 ---
 
@@ -42,70 +64,27 @@ Inkode es una herramienta web para developers que permite guardar y anotar bloqu
 
 ---
 
-## Instalación local
+## Estado del proyecto
 
-### Prerequisitos
+> 🚧 **Building in public** — Inkode está en desarrollo activo. Las decisiones de arquitectura, cambios de diseño y nuevas features se pueden seguir en los commits.
 
-- Node.js 18+
-- Una cuenta de Firebase con Firestore y Authentication habilitados
+Próximas features planeadas:
 
-### Pasos
-
-1. Cloná el repositorio:
-
-```bash
-git clone https://github.com/TFango/inkode-web.git
-cd inkode-web
-```
-
-2. Instalá las dependencias:
-
-```bash
-npm install
-```
-
-3. Creá un archivo `.env.local` en la raíz con tus credenciales de Firebase:
-
-```env
-NEXT_PUBLIC_FIREBASE_API_KEY=
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
-NEXT_PUBLIC_FIREBASE_APP_ID=
-```
-
-4. Corré el servidor de desarrollo:
-
-```bash
-npm run dev
-```
-
-Abrí [http://localhost:3000](http://localhost:3000) en tu navegador.
-
----
-
-## Uso
-
-1. Iniciá sesión con tu cuenta de Google
-2. Creá un tablero nuevo
-3. Dentro del tablero, usá el botón **+** para agregar bloques de código
-4. Escribí tu código — el lenguaje se detecta automáticamente
-5. Cambiá a **modo dibujo** para agregar flechas, texto y anotaciones encima
-6. Usá el botón **Copiar** para copiar el código limpio, sin anotaciones
-7. Todo se guarda automáticamente
+- [ ] Modo selección múltiple para copiar varios bloques juntos
+- [ ] Exportar tablero como imagen
+- [ ] Templates de tableros predefinidos
+- [ ] Modo colaborativo (roadmap)
 
 ---
 
 ## Autor
 
-Creado por **Emanuel Bustos**
+<div align="center">
 
-- [LinkedIn](https://www.linkedin.com/in/facundo-emanuel-jimenez-bustos-49207136b)
-- [GitHub](https://github.com/TFango)
+Construido por **Emanuel Bustos**
 
----
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/facundo-emanuel-jimenez-bustos-49207136b)
+[![GitHub](https://img.shields.io/badge/GitHub-TFango-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/TFango)
+[![Certezza](https://img.shields.io/badge/Certezza-Web%20Agency-6366F1?style=for-the-badge)](https://www.certezza.com.ar)
 
-## Licencia
-
-MIT
+</div>
