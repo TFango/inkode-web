@@ -22,9 +22,19 @@ Ejemplos de progresión:
 
 export const actualizaciones: Version[] = [
   {
+    version: "0.2.0",
+    date: "2026-04-07",
+    title: "Indicador visual de modo en el canvas",
+    changes: [
+      "El canvas muestra un borde de color según el modo activo",
+      "Modo código: borde azul",
+      "Modo dibujo: borde naranja",
+    ],
+  },
+  {
     version: "0.1.0",
     date: "2026-04-07",
-    title: "Creacion de una pagina 'actualizaciones'",
-    changes: ["visibilidad de nuevas actualizaciones"],
-  }
+    title: "Primera versión pública",
+    changes: ["Página de novedades para seguir las actualizaciones del producto"],
+  },
 ];

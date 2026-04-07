@@ -30,7 +30,19 @@ export default function BoardCanvas({ boardId }: { boardId: string }) {
   if (!user) return null;
 
   return (
-    <div className="tldraw__editor" style={{ width: "100vw", height: "100vh" }}>
+    <div style={{ width: "100vw", height: "100vh", position: "relative" }}>
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          boxShadow:
+            mode === "code"
+              ? "inset 0 0 0 3px var(--color-accent)"
+              : "inset 0 0 0 3px var(--color-draw)",
+          pointerEvents: "none",
+          zIndex: 9999,
+        }}
+      />
       <ModeProvider value={{ mode, setMode }}>
         <Tldraw
           licenseKey={process.env.NEXT_PUBLIC_TLDRAW_LICENSE_KEY}
