@@ -113,3 +113,66 @@
 .logoutBtn:active {
   transform: scale(0.96);
 }
+
+/* 1280px — laptops chicas */
+@media (max-width: 1280px) {
+  .header {
+    padding: 0 24px;
+    height: 64px;
+  }
+
+  .logo {
+    font-size: 1.6rem;
+  }
+
+  .nav {
+    gap: 16px;
+  }
+}
+
+/* 1366px — laptops gama media */
+@media (min-width: 1281px) and (max-width: 1366px) {
+  .header {
+    padding: 0 32px;
+  }
+
+  .logo {
+    font-size: 1.75rem;
+  }
+}
+
+/* 1440px — laptops premium */
+@media (min-width: 1367px) and (max-width: 1440px) {
+  .header {
+    padding: 0 40px;
+  }
+
+  .logo {
+    font-size: 2rem;
+  }
+}
+
+/* 2560px — QHD */
+@media (min-width: 2560px) {
+  .header {
+    height: 100px;
+    padding: 0 80px;
+  }
+
+  .logo {
+    font-size: 2.75rem;
+  }
+
+  .link {
+    font-size: 1.1rem;
+  }
+
+  .nav {
+    gap: 32px;
+  }
+
+  .avatarLink {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}

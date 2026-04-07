@@ -38,7 +38,7 @@
 
 .btn {
   width: 100%;
-  max-width: 420px; /* evita que sea gigante */
+  max-width: 420px;
   display: flex;
   padding: 1rem 1.2rem;
   justify-content: center;
@@ -119,4 +119,97 @@
 
 .footerLink:hover {
   color: var(--color-text);
+}
+
+/* 1280px — laptops chicas */
+@media (max-width: 1280px) {
+  .main {
+    padding: 1rem;
+  }
+
+  .container {
+    gap: 1.5rem;
+  }
+
+  .title {
+    font-size: 2rem;
+    max-width: 400px;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+    max-width: 360px;
+  }
+
+  .video {
+    max-width: 460px;
+  }
+}
+
+/* 1366px — laptops gama media */
+@media (min-width: 1281px) and (max-width: 1366px) {
+  .main {
+    padding: 1.25rem;
+  }
+
+  .container {
+    gap: 2rem;
+  }
+
+  .title {
+    font-size: 2.2rem;
+    max-width: 460px;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    max-width: 400px;
+  }
+
+  .video {
+    max-width: 520px;
+  }
+}
+
+/* 1440px — laptops premium */
+@media (min-width: 1367px) and (max-width: 1440px) {
+  .title {
+    font-size: 2.6rem;
+    max-width: 520px;
+  }
+
+  .subtitle {
+    font-size: 1.1rem;
+  }
+
+  .video {
+    max-width: 620px;
+  }
+}
+
+/* 2560px — QHD */
+@media (min-width: 2560px) {
+  .container {
+    max-width: 2000px;
+    gap: 6rem;
+  }
+
+  .title {
+    font-size: 4rem;
+    max-width: 800px;
+  }
+
+  .subtitle {
+    font-size: 1.4rem;
+    max-width: 650px;
+  }
+
+  .video {
+    max-width: 1000px;
+  }
+
+  .btn {
+    font-size: 1.1rem;
+    padding: 1.1rem 1.4rem;
+  }
 }

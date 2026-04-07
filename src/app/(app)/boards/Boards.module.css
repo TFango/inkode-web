@@ -25,3 +25,55 @@
 
 .list {
 }
+
+/* 1280px — laptops chicas */
+@media (max-width: 1280px) {
+  .hero {
+    padding: 24px 24px 0px;
+  }
+
+  .container {
+    gap: 2rem;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+}
+
+/* 1366px — laptops gama media */
+@media (min-width: 1281px) and (max-width: 1366px) {
+  .hero {
+    padding: 32px 32px 0px;
+  }
+
+  .title {
+    font-size: 1.75rem;
+  }
+}
+
+/* 1440px — laptops premium */
+@media (min-width: 1367px) and (max-width: 1440px) {
+  .hero {
+    padding: 40px 40px 0px;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+}
+
+/* 2560px — QHD */
+@media (min-width: 2560px) {
+  .hero {
+    padding: 70px 80px 0px;
+  }
+
+  .container {
+    gap: 4rem;
+  }
+
+  .title {
+    font-size: 3rem;
+  }
+}

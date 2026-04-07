@@ -149,3 +149,94 @@
   color: var(--color-danger);
   text-align: center;
 }
+
+/* 1280px — laptops chicas */
+@media (max-width: 1280px) {
+  .feedback {
+    gap: 2rem;
+    padding: 1rem;
+  }
+
+  .title {
+    font-size: 1.8rem;
+  }
+
+  .description {
+    font-size: 1rem;
+  }
+
+  .help {
+    width: 100%;
+    max-width: 28rem;
+  }
+
+  .form {
+    padding: 1.25rem 1.5rem;
+  }
+}
+
+/* 1366px — laptops gama media */
+@media (min-width: 1281px) and (max-width: 1366px) {
+  .feedback {
+    gap: 2rem;
+    padding: 1.5rem;
+  }
+
+  .title {
+    font-size: 2.2rem;
+  }
+
+  .help {
+    width: 100%;
+    max-width: 32rem;
+  }
+
+  .form {
+    padding: 1.5rem 2rem;
+  }
+}
+
+/* 1440px — laptops premium */
+@media (min-width: 1367px) and (max-width: 1440px) {
+  .title {
+    font-size: 2.6rem;
+  }
+
+  .help {
+    width: 36rem;
+  }
+}
+
+/* 2560px — QHD */
+@media (min-width: 2560px) {
+  .title {
+    font-size: 4rem;
+  }
+
+  .description {
+    font-size: 1.5rem;
+  }
+
+  .help {
+    width: 52rem;
+  }
+
+  .form {
+    padding: 2.5rem 4rem;
+  }
+
+  .label {
+    font-size: 1.1rem;
+  }
+
+  .input,
+  .textarea {
+    font-size: 1.1rem;
+    padding: 0.8rem 1rem;
+  }
+
+  .btn {
+    font-size: 1.1rem;
+    padding: 0.8rem 2.5rem;
+  }
+}
