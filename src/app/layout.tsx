@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./global.css";
 import { AuthProvider } from "@/context/authContext";
+import { PosthogProvider } from "@/context/posthogContext";
 import Header from "@/components/layout/header/page";
 
 const geistSans = Geist({
@@ -30,7 +31,9 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <PosthogProvider>{children}</PosthogProvider>
+        </AuthProvider>
       </body>
     </html>
   );

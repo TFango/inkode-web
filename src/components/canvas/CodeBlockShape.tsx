@@ -56,6 +56,7 @@ import {
 
 
 import styles from "./CodeBlockShape.module.css";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 declare module "tldraw" {
   interface TLShapeUtilMap {
@@ -140,6 +141,7 @@ export class CodeBlockShapeUtil extends ShapeUtil<CodeBlockShape> {
 export function CodeBlockContent({ shape }: { shape: CodeBlockShape }) {
   const editor = useEditor();
   const { mode } = useMode();
+  const { track } = useAnalytics();
 
   const isCodeMode = mode === "code";
 
@@ -216,7 +218,10 @@ export function CodeBlockContent({ shape }: { shape: CodeBlockShape }) {
             e.stopPropagation();
             e.preventDefault();
           }}
-          onClick={() => navigator.clipboard.writeText(shape.props.code)}
+          onClick={() => {
+            navigator.clipboard.writeText(shape.props.code);
+            track("code_copied", { language: shape.props.language });
+          }}
         >
           Copiar
         </button>
