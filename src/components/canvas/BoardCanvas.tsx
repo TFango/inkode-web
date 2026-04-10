@@ -14,11 +14,12 @@ import ModeController from "./ModeController";
 import KeyboardBlocker from "./KeyboardBlocker";
 import { useMode } from "@/context/modeContext";
 import { DefaultToolbar } from "tldraw";
+import OnboardingTooltip from "./OnboardingTooltip";
 
 const shapeUtils = [CodeBlockShapeUtil];
 
 export default function BoardCanvas({ boardId }: { boardId: string }) {
-  const { user, loading } = useAuth();
+  const { user, loading, tourCompletado } = useAuth();
   const router = useRouter();
   const [mode, setMode] = useState<"code" | "draw">("draw");
 
@@ -53,6 +54,7 @@ export default function BoardCanvas({ boardId }: { boardId: string }) {
             Toolbar: ConditionalToolbar,
             InFrontOfTheCanvas: () => (
               <>
+                {tourCompletado === false && <OnboardingTooltip />}
                 <ModeController />
                 <KeyboardBlocker />
                 <CanvasPesistence boardId={boardId} />

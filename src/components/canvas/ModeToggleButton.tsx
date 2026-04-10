@@ -12,7 +12,7 @@ export function ModeToggleButton() {
         mode === "code" ? "Cambiar a Modo dibujo" : "Cambiar a Modo código"
       }
     >
-      {mode === "code" ? "✏️" : "💻"}
+      {mode === "code" ? "Dibujo" : "Código"}
     </TldrawUiButton>
   );
 }
