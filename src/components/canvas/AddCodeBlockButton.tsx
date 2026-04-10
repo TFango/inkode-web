@@ -2,9 +2,11 @@
 
 import { useEditor } from "tldraw";
 import { TldrawUiButton } from "tldraw";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 export default function AddCodeBlockButton() {
   const editor = useEditor();
+  const { track } = useAnalytics();
 
   const handleAdd = () => {
     const bounds = editor.getViewportPageBounds();
@@ -22,7 +24,7 @@ export default function AddCodeBlockButton() {
       },
     });
 
-    console.log("shape creada");
+    track("code_block_created");
   };
 
   return (
