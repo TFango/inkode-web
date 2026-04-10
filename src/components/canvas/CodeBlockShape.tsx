@@ -15,7 +15,6 @@ import json from "highlight.js/lib/languages/json";
 import bash from "highlight.js/lib/languages/bash";
 import php from "highlight.js/lib/languages/php";
 import ruby from "highlight.js/lib/languages/ruby";
-import { useEffect, useState } from "react";
 
 hljs.registerLanguage("javascript", javascript);
 hljs.registerLanguage("typescript", typescript);
@@ -50,11 +49,11 @@ import {
   Rectangle2d,
   ShapeUtil,
   TLBaseShape,
-  TLGeometryOpts,
   TLResizeInfo,
   T,
   useEditor,
 } from "tldraw";
+
 
 import styles from "./CodeBlockShape.module.css";
 
@@ -99,7 +98,7 @@ export class CodeBlockShapeUtil extends ShapeUtil<CodeBlockShape> {
     return { w: 500, h: 300, code: "", language: "javascript", userResized: false };
   }
 
-  getGeometry(shape: CodeBlockShape, opts?: TLGeometryOpts): Geometry2d {
+  getGeometry(shape: CodeBlockShape): Geometry2d {
     return new Rectangle2d({
       width: shape.props.w,
       height: shape.props.h,
@@ -140,27 +139,9 @@ export class CodeBlockShapeUtil extends ShapeUtil<CodeBlockShape> {
 
 export function CodeBlockContent({ shape }: { shape: CodeBlockShape }) {
   const editor = useEditor();
-  const [isMoving, setIsMoving] = useState(false);
   const { mode } = useMode();
 
   const isCodeMode = mode === "code";
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.code === "KeyQ") setIsMoving(true);
-    };
-
-    const handleKeyUp = (e: KeyboardEvent) => {
-      if (e.code === "KeyQ") setIsMoving(false);
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("keyup", handleKeyUp);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("keyup", handleKeyUp);
-    };
-  }, []);
 
   const LINE_HEIGHT = 19;
   const TOOLBAR_HEIGHT = 40;
@@ -193,10 +174,6 @@ export function CodeBlockContent({ shape }: { shape: CodeBlockShape }) {
       type: "code-block",
       props: { language: e.target.value },
     });
-  };
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(shape.props.code);
   };
 
   return (

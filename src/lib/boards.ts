@@ -57,6 +57,18 @@ export async function saveBoardCanvas(
   boardId: string,
   snapshot: unknown,
 ): Promise<void> {
+  const serialized = JSON.stringify(snapshot);
+  const sizeKB = new Blob([serialized]).size / 1024;
+
+  if (sizeKB > 800) {
+    console.warn(`[inkode] Canvas muy grande: ${sizeKB.toFixed(0)}KB. Límite Firestore: 1024KB.`);
+  }
+
+  if (sizeKB >= 1024) {
+    console.error("[inkode] Canvas supera 1MB, no se guardó en Firestore.");
+    return;
+  }
+
   const ref = doc(db, "boards", boardId);
   await setDoc(ref, { canvas: snapshot, canvasSavedAt: Date.now() }, { merge: true });
 }
@@ -73,6 +85,9 @@ export async function loadBoardCanvas(
 
   const data = ref.data();
   if (!data?.canvas) return null;
+
+  const sizeKB = new Blob([JSON.stringify(data.canvas)]).size / 1024;
+  console.log(`[inkode] Canvas cargado: ${sizeKB.toFixed(0)}KB`);
 
   return { snapshot: data.canvas, savedAt: data.canvasSavedAt ?? 0 };
 }

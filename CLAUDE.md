@@ -2,6 +2,9 @@
 
 Responde siempre en español.
 
+> **ADVERTENCIA — PROYECTO EN PRODUCCIÓN**
+> Inkode está lanzado como MVP en https://inkode-web.vercel.app, fue presentado y sigue siendo presentado ante comisiones de la facultad. Hay usuarios reales activos. Antes de cualquier modificación, considerar el impacto en producción: no romper flujos existentes, no hacer cambios destructivos en Firestore, trabajar siempre en ramas separadas y mergear a `main` solo cuando esté probado.
+
 ## ¿Qué es Inkode?
 
 Inkode es una herramienta web para developers que permite guardar y anotar bloques de código en un **canvas infinito**, similar a Figma o n8n. La diferencia clave con otras herramientas es que las anotaciones viven en una **capa separada** del código, por lo que el código siempre se puede copiar limpio.
