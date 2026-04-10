@@ -42,6 +42,7 @@ Inkode es una herramienta web para developers que permite guardar y anotar bloqu
 --color-accent-hover:    #2563eb;
 --color-danger:          #ef4444;
 --color-danger-hover:    #dc2626;
+--color-draw:            #f97316;
 ```
 
 ---
@@ -82,7 +83,8 @@ src/
       CodeBlockShape.tsx       ← custom shape de tldraw con Monaco Editor
       KeyboardBlocker.tsx      ← bloquea teclado dentro de Monaco
       ModeController.tsx       ← sincroniza modo con tldraw
-      ModeToggleButton.tsx     ← botón cambiar entre modos
+      ModeToggleButton.tsx     ← botón cambiar entre modos (texto "Código"/"Dibujo")
+      OnboardingTooltip.tsx    ← tour guiado para nuevos usuarios
     layout/
       header/
         Header.tsx         ← header con variante login/app
@@ -92,9 +94,12 @@ src/
     modeContext.tsx        ← ModeProvider + useMode hook
   lib/
     boards.ts             ← CRUD de tableros + saveBoardCanvas + loadBoardCanvas
+    users.ts              ← createUserProfile, getUserProfile, completarTour
     firebase.ts           ← inicialización de Firebase
   types/
     board.ts              ← type Board
+  data/
+    actualizaciones.ts    ← array estático de versiones (SemVer)
 ```
 
 ---
@@ -126,9 +131,15 @@ boards (colección)
         ├── userId: string
         ├── createdAt: Timestamp
         └── canvas: object  ← snapshot de tldraw (getSnapshot/loadSnapshot)
+
+users (colección)
+  └── userId  ← mismo uid de Firebase Auth
+        └── tourCompletado: boolean
 ```
 
 **Reglas de seguridad:** cada usuario solo puede leer/escribir sus propios documentos.
+
+**Nota sobre usuarios existentes:** los usuarios registrados antes de la colección `users` no tienen documento. `getUserProfile` retorna `null` para ellos, lo que se trata igual que `tourCompletado: false` — el tour aparece igual y al terminar se crea el documento.
 
 ---
 
@@ -137,9 +148,10 @@ boards (colección)
 ### Auth
 - Solo Google via `GoogleAuthProvider` + `signInWithPopup`
 - El error `auth/popup-closed-by-user` se ignora silenciosamente (es acción válida del usuario)
-- Si el usuario es nuevo (`getAdditionalUserInfo(result)?.isNewUser`), se crea un tablero default automáticamente
+- Si el usuario es nuevo (`getAdditionalUserInfo(result)?.isNewUser`), se crea un tablero default y un perfil en `users` automáticamente
 - El estado global de auth vive en `AuthContext` — nunca llamar Firebase directamente desde componentes
 - `useAuth()` se importa siempre desde `@/context/authContext`
+- `AuthContext` expone `tourCompletado` (boolean | null) y `setTourCompletado` para controlar el onboarding
 
 ### Canvas — tldraw
 - `BoardCanvas.tsx` es el único componente cliente que monta `<Tldraw>`
@@ -162,7 +174,6 @@ boards (colección)
 - `ModeContext` maneja el estado global del modo (`"code"` | `"draw"`)
 - `ModeController` cambia la herramienta activa de tldraw y oculta/muestra la toolbar
 - `KeyboardBlocker` usa `stopImmediatePropagation` en el container de tldraw
-- Tecla `Q` mientras se mantiene presionada activa `pointerEvents: none` en el bloque para poder moverlo
 - En modo código: toolbar de tldraw oculta via `ConditionalToolbar`
 - En modo dibujo: toolbar de tldraw visible, Monaco en `readOnly: true`
 
