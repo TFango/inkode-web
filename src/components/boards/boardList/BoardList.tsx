@@ -11,6 +11,17 @@ type Props = {
   onDeleted: () => void;
 };
 
+function IconGrid() {
+  return (
+    <svg className={styles.emptyIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="3" width="7" height="7" rx="1.5" />
+      <rect x="14" y="3" width="7" height="7" rx="1.5" />
+      <rect x="3" y="14" width="7" height="7" rx="1.5" />
+      <rect x="14" y="14" width="7" height="7" rx="1.5" />
+    </svg>
+  );
+}
+
 export default function BoardList({ boards, ready, onDeleted }: Props) {
   const handleDelete = async (id: string) => {
     try {
@@ -26,14 +37,11 @@ export default function BoardList({ boards, ready, onDeleted }: Props) {
   if (boards.length === 0) {
     return (
       <div className={styles.empty}>
-        <svg className={styles.emptyIcon} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="4" y="4" width="18" height="18" rx="3" stroke="currentColor" strokeWidth="2"/>
-          <rect x="26" y="4" width="18" height="18" rx="3" stroke="currentColor" strokeWidth="2"/>
-          <rect x="4" y="26" width="18" height="18" rx="3" stroke="currentColor" strokeWidth="2"/>
-          <rect x="26" y="26" width="18" height="18" rx="3" stroke="currentColor" strokeWidth="2"/>
-        </svg>
-        <p className={styles.emptyTitle}>Todavía no tenés ningún tablero</p>
-        <p className={styles.emptySubtitle}>Creá uno con "Nuevo board" para empezar.</p>
+        <div className={styles.emptyIconWrap}>
+          <IconGrid />
+        </div>
+        <p className={styles.emptyTitle}>Todavía no tenés tableros</p>
+        <p className={styles.emptySubtitle}>Creá uno con "Nuevo tablero" para empezar.</p>
       </div>
     );
   }

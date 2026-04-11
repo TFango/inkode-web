@@ -5,6 +5,14 @@ import { createBoard } from "@/lib/boards";
 import { useEffect, useRef, useState } from "react";
 import style from "./BoardForm.module.css";
 
+function IconPlus() {
+  return (
+    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round">
+      <path d="M7 1v12M1 7h12" />
+    </svg>
+  );
+}
+
 export default function BoardForm({ onCreated }: { onCreated: () => void }) {
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
@@ -49,13 +57,17 @@ export default function BoardForm({ onCreated }: { onCreated: () => void }) {
   return (
     <section>
       <button className={style.newBoard} onClick={() => setIsOpen(true)}>
+        <span className={style.newBoardIcon}><IconPlus /></span>
         Nuevo tablero
       </button>
 
       {isOpen && (
         <div className={style.window} onClick={close}>
           <div className={style.container} onClick={(e) => e.stopPropagation()}>
-            <h3 className={style.title}>Crear tablero</h3>
+            <div className={style.modalHeader}>
+              <h3 className={style.title}>Nuevo tablero</h3>
+              <span className={style.titleSub}>canvas infinito · Monaco Editor</span>
+            </div>
 
             <input
               ref={inputRef}
@@ -63,7 +75,7 @@ export default function BoardForm({ onCreated }: { onCreated: () => void }) {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Nombre del tablero"
+              placeholder="Ej: Auth flow, API routes, algoritmos..."
               onKeyDown={(e) => {
                 if (e.key === "Enter") handleSubmit();
               }}
@@ -72,10 +84,10 @@ export default function BoardForm({ onCreated }: { onCreated: () => void }) {
             <div className={style.buttons}>
               <button
                 onClick={handleSubmit}
-                disabled={loading}
+                disabled={loading || !name.trim()}
                 className={style.create}
               >
-                {loading ? "Creando..." : "Crear"}
+                {loading ? "Creando..." : "Crear tablero"}
               </button>
 
               <button className={style.cancel} onClick={close}>

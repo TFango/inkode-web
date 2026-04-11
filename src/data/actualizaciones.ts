@@ -22,6 +22,17 @@ Ejemplos de progresión:
 
 export const actualizaciones: Version[] = [
   {
+    version: "0.4.0",
+    date: "2026-04-11",
+    title: "Rediseño visual completo de la interfaz",
+    changes: [
+      "Página de tableros con grid de cards, preview de código y contador",
+      "Header compacto con punto pulsante en Novedades cuando hay updates recientes",
+      "Página de Feedback con categorías seleccionables (Bug, Idea, Pregunta)",
+      "Página de Cuenta con avatar, badge de Google y nota explicativa de solo lectura",
+    ],
+  },
+  {
     version: "0.3.0",
     date: "2026-04-09",
     title: "Onboarding tour para nuevos usuarios",

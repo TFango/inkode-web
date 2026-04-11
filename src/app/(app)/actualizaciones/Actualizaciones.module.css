@@ -1,58 +1,179 @@
+/* ─── Página ──────────────────────────────────────────────────────────────── */
+
 .hero {
-  padding: 50px 50px 0px;
+  padding: 50px 50px 80px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 3.3125rem;
+  gap: 3rem;
+  max-width: 1100px;
+}
+
+/* ─── Encabezado ─────────────────────────────────────────────────────────── */
+
+.pageHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
 }
 
 .title {
   color: var(--color-text);
-  font-size: 2.25rem;
+  font-size: 2rem;
   font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 
-.list {
+.titleMeta {
   display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  width: 100%;
-  max-width: 760px;
-}
-
-.card {
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  padding: 1.5rem 2rem;
-  display: flex;
-  flex-direction: column;
+  align-items: center;
   gap: 0.75rem;
 }
 
-.cardHeader {
-  display: flex;
-  align-items: baseline;
-  gap: 1rem;
-}
-
-.version {
+.currentVersion {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.78rem;
   color: var(--color-accent);
-  font-size: 1rem;
-  font-weight: 700;
-  font-family: var(--font-mono, "JetBrains Mono", monospace);
+  letter-spacing: 0.02em;
 }
 
-.cardTitle {
-  color: var(--color-text);
-  font-size: 1.125rem;
-  font-weight: 600;
+.titleSep {
+  width: 1px;
+  height: 12px;
+  background: rgba(42, 42, 42, 0.9);
 }
 
-.date {
+.entryCount {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.78rem;
   color: var(--color-text-secondary);
-  font-size: 0.875rem;
-  margin-left: auto;
+  letter-spacing: 0.02em;
+}
+
+/* ─── Timeline ────────────────────────────────────────────────────────────── */
+
+.timeline {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Línea vertical continua */
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 168px; /* alineada con el centro del nodo */
+  top: 10px;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    rgba(42, 42, 42, 0.9) 0%,
+    rgba(42, 42, 42, 0.9) 85%,
+    transparent 100%
+  );
+}
+
+/* ─── Entrada individual ─────────────────────────────────────────────────── */
+
+.entry {
+  display: grid;
+  grid-template-columns: 168px 1fr;
+  gap: 0 2.5rem;
+  padding-bottom: 2.75rem;
+  position: relative;
+}
+
+.entry:last-child {
+  padding-bottom: 0;
+}
+
+/* ─── Columna izquierda — metadata ───────────────────────────────────────── */
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.35rem;
+  padding-top: 1px;
+  padding-right: 1.75rem;
+  position: relative;
+}
+
+/* Nodo en la línea del timeline */
+.meta::after {
+  content: "";
+  position: absolute;
+  right: -5px; /* centrado sobre la línea */
+  top: 7px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--color-surface);
+  border: 1.5px solid rgba(42, 42, 42, 0.9);
+  z-index: 1;
+}
+
+/* Nodo de la primera entrada — acento */
+.entry:first-child .meta::after {
+  border-color: var(--color-accent);
+  background: rgba(59, 130, 246, 0.15);
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.25);
+}
+
+.versionTag {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.02em;
+}
+
+.entry:first-child .versionTag {
+  color: var(--color-accent);
+}
+
+.dateTag {
+  font-size: 0.75rem;
+  color: rgba(136, 136, 136, 0.55);
+  font-family: "JetBrains Mono", monospace;
+  white-space: nowrap;
+}
+
+/* Badge LATEST */
+.latestBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: #93b4f8;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-top: 0.1rem;
+}
+
+/* ─── Columna derecha — contenido ────────────────────────────────────────── */
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 0;
+}
+
+.entryTitle {
+  font-size: 0.975rem;
+  font-weight: 600;
+  color: var(--color-text);
+  letter-spacing: -0.01em;
+  line-height: 1.3;
 }
 
 .changes {
@@ -61,77 +182,105 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.35rem;
 }
 
 .changes li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
   color: var(--color-text-secondary);
-  font-size: 0.9375rem;
-  padding-left: 1rem;
-  position: relative;
+  font-size: 0.875rem;
+  line-height: 1.5;
 }
 
-.changes li::before {
-  content: "–";
-  position: absolute;
-  left: 0;
-  color: var(--color-accent);
+.changeIcon {
+  flex-shrink: 0;
+  width: 12px;
+  height: 12px;
+  color: rgba(59, 130, 246, 0.5);
+  margin-top: 1px;
 }
+
+/* ─── Responsive ─────────────────────────────────────────────────────────── */
 
 /* 1280px — laptops chicas */
 @media (max-width: 1280px) {
   .hero {
-    padding: 24px 24px 0px;
-    gap: 2rem;
+    padding: 24px 24px 60px;
+    gap: 2.25rem;
   }
 
   .title {
     font-size: 1.5rem;
   }
 
-  .card {
-    padding: 1.25rem 1.5rem;
+  .timeline::before {
+    left: 140px;
+  }
+
+  .entry {
+    grid-template-columns: 140px 1fr;
   }
 }
 
 /* 1366px — laptops gama media */
 @media (min-width: 1281px) and (max-width: 1366px) {
   .hero {
-    padding: 32px 32px 0px;
+    padding: 32px 32px 70px;
   }
 
   .title {
-    font-size: 1.75rem;
+    font-size: 1.65rem;
   }
 }
 
 /* 1440px — laptops premium */
 @media (min-width: 1367px) and (max-width: 1440px) {
   .hero {
-    padding: 40px 40px 0px;
+    padding: 40px 40px 70px;
   }
 
   .title {
-    font-size: 2rem;
+    font-size: 1.8rem;
   }
 }
 
 /* 2560px — QHD */
 @media (min-width: 2560px) {
   .hero {
-    padding: 70px 80px 0px;
+    padding: 70px 80px 100px;
     gap: 4rem;
+    max-width: 1400px;
   }
 
   .title {
-    font-size: 3rem;
+    font-size: 2.75rem;
   }
 
-  .list {
-    max-width: 1000px;
+  .timeline::before {
+    left: 200px;
   }
 
-  .cardTitle {
-    font-size: 1.375rem;
+  .entry {
+    grid-template-columns: 200px 1fr;
+    padding-bottom: 3.5rem;
+    gap: 0 3rem;
+  }
+
+  .entryTitle {
+    font-size: 1.1rem;
+  }
+
+  .changes li {
+    font-size: 1rem;
+  }
+
+  .versionTag {
+    font-size: 0.9rem;
+  }
+
+  .dateTag {
+    font-size: 0.82rem;
   }
 }

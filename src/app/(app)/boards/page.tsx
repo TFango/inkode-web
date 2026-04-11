@@ -2,6 +2,7 @@
 
 import BoardForm from "@/components/boards/BoardForm/BoardForm";
 import BoardList from "@/components/boards/boardList/BoardList";
+
 import { useAuth } from "@/context/authContext";
 import { getBoards } from "@/lib/boards";
 import { Board } from "@/types/board";
@@ -41,11 +42,27 @@ export default function BoardsPage() {
 
   if (loading) return <p>Cargando...</p>;
 
+  // Nombre de pila solamente
+  const firstName = user?.displayName?.split(" ")[0] ?? "";
+
   return (
     <main className={styles.hero}>
       <div className={styles.container}>
         <div className={styles.info}>
-          <h1 className={styles.title}>{getGreeting()}, {user?.displayName}</h1>
+          <div className={styles.titleGroup}>
+            <h1 className={styles.title}>
+              {getGreeting()}{firstName ? `, ${firstName}` : ""}
+            </h1>
+            {ready && (
+              <span className={styles.boardCount}>
+                {boards.length === 0
+                  ? "sin tableros"
+                  : boards.length === 1
+                  ? "1 tablero"
+                  : `${boards.length} tableros`}
+              </span>
+            )}
+          </div>
           <BoardForm onCreated={refresh} />
         </div>
 

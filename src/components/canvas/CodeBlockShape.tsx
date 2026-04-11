@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { useMode } from "@/context/modeContext";
 import Editor from "@monaco-editor/react";
 import hljs from "highlight.js/lib/core";
@@ -142,6 +143,7 @@ export function CodeBlockContent({ shape }: { shape: CodeBlockShape }) {
   const editor = useEditor();
   const { mode } = useMode();
   const { track } = useAnalytics();
+  const [copied, setCopied] = useState(false);
 
   const isCodeMode = mode === "code";
 
@@ -192,28 +194,34 @@ export function CodeBlockContent({ shape }: { shape: CodeBlockShape }) {
       }}
     >
       <div className={styles.toolbar}>
-        <select
-          value={shape.props.language}
-          onChange={handleLanguageChange}
-          className={styles.select}
-        >
-          <option value="javascript">JavaScript</option>
-          <option value="typescript">TypeScript</option>
-          <option value="python">Python</option>
-          <option value="java">Java</option>
-          <option value="html">HTML</option>
-          <option value="css">CSS</option>
-          <option value="go">Go</option>
-          <option value="rust">Rust</option>
-          <option value="cpp">C++</option>
-          <option value="sql">SQL</option>
-          <option value="json">JSON</option>
-          <option value="shell">Bash/Shell</option>
-          <option value="php">PHP</option>
-          <option value="ruby">Ruby</option>
-        </select>
+        {/* Selector de lenguaje con prefijo { } */}
+        <div className={styles.selectWrap}>
+          <span className={styles.selectPrefix}>{"{ }"}</span>
+          <select
+            value={shape.props.language}
+            onChange={handleLanguageChange}
+            className={styles.select}
+          >
+            <option value="javascript">JavaScript</option>
+            <option value="typescript">TypeScript</option>
+            <option value="python">Python</option>
+            <option value="java">Java</option>
+            <option value="html">HTML</option>
+            <option value="css">CSS</option>
+            <option value="go">Go</option>
+            <option value="rust">Rust</option>
+            <option value="cpp">C++</option>
+            <option value="sql">SQL</option>
+            <option value="json">JSON</option>
+            <option value="shell">Bash/Shell</option>
+            <option value="php">PHP</option>
+            <option value="ruby">Ruby</option>
+          </select>
+        </div>
+
+        {/* Botón copiar con ícono + feedback */}
         <button
-          className={styles.copyBtn}
+          className={`${styles.copyBtn} ${copied ? styles.copyBtnSuccess : ""}`}
           onPointerDown={(e) => {
             e.stopPropagation();
             e.preventDefault();
@@ -221,9 +229,26 @@ export function CodeBlockContent({ shape }: { shape: CodeBlockShape }) {
           onClick={() => {
             navigator.clipboard.writeText(shape.props.code);
             track("code_copied", { language: shape.props.language });
+            setCopied(true);
+            setTimeout(() => setCopied(false), 1500);
           }}
         >
-          Copiar
+          {copied ? (
+            <>
+              <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M2.5 7.5l3 3 6-6" />
+              </svg>
+              Copiado
+            </>
+          ) : (
+            <>
+              <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="5" y="4.5" width="7" height="8" rx="1.5" />
+                <path d="M3.5 9.5H3a1.5 1.5 0 01-1.5-1.5V3A1.5 1.5 0 013 1.5h5A1.5 1.5 0 019.5 3v1" />
+              </svg>
+              Copiar
+            </>
+          )}
         </button>
       </div>
 

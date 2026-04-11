@@ -1,11 +1,15 @@
 .header {
-  height: 80px;
+  height: 64px;
   display: flex;
   justify-content: start;
   align-items: center;
-  padding: 0px 50px;
-  border-bottom: 1px solid var(--color-border);
-  background: var(--color-bg);
+  padding: 0 50px;
+  border-bottom: 1px solid rgba(42, 42, 42, 0.8);
+  background: rgba(17, 17, 17, 0.95);
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 50;
 }
 
 .container {
@@ -15,52 +19,121 @@
   align-items: center;
 }
 
+/* ─── Logo ────────────────────────────────────────────────────────────────── */
+
 .logo {
-  font-size: 2.25rem;
+  font-size: 1.4rem;
   font-weight: 700;
-  color: inherit;
+  color: var(--color-text);
   text-decoration: none;
+  letter-spacing: -0.03em;
+  transition: opacity 150ms ease;
+  line-height: 1;
 }
+
+.logo:hover {
+  opacity: 0.8;
+}
+
+.logoAccent {
+  color: var(--color-accent);
+}
+
+/* ─── Nav ─────────────────────────────────────────────────────────────────── */
 
 .nav {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 4px;
 }
 
+/* Separador vertical entre secciones */
+.sep {
+  width: 1px;
+  height: 18px;
+  background: rgba(42, 42, 42, 0.9);
+  margin: 0 8px;
+  flex-shrink: 0;
+}
+
+/* ─── Links de navegación ─────────────────────────────────────────────────── */
+
 .link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 6px;
   color: var(--color-text-secondary);
-  font-size: 0.95rem;
+  font-size: 0.875rem;
   text-decoration: none;
-  transition: color 150ms ease;
+  transition: color 150ms ease, background 150ms ease;
+  white-space: nowrap;
 }
 
 .link:hover {
   color: var(--color-text);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .linkActive {
   color: var(--color-text);
+  background: rgba(255, 255, 255, 0.05);
 }
 
-/* Avatar */
+/* ─── Novedades — punto pulsante ──────────────────────────────────────────── */
+
+.noveltyDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* Pulse ring */
+.noveltyDot::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(59, 130, 246, 0.45);
+  animation: pulseRing 2.4s ease-out infinite;
+}
+
+@keyframes pulseRing {
+  0%   { opacity: 0.8; transform: scale(1); }
+  70%  { opacity: 0;   transform: scale(2.2); }
+  100% { opacity: 0;   transform: scale(2.2); }
+}
+
+/* Cuando el link está activo, el dot deja de pulsar (ya lo vio) */
+.linkActive .noveltyDot::after {
+  animation: none;
+  opacity: 0;
+}
+
+/* ─── Avatar ──────────────────────────────────────────────────────────────── */
 
 .avatarLink {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  border: 2px solid transparent;
+  border: 1.5px solid transparent;
   overflow: hidden;
-  transition: border-color 150ms ease;
+  transition: border-color 150ms ease, opacity 150ms ease;
   text-decoration: none;
   flex-shrink: 0;
+  margin-left: 4px;
 }
 
 .avatarLink:hover {
-  border-color: var(--color-text-secondary);
+  border-color: rgba(136, 136, 136, 0.4);
 }
 
 .avatarLinkActive {
@@ -78,55 +151,59 @@
   border-radius: 50%;
 }
 
-.avatarInitial {
-  width: 100%;
-  height: 100%;
-  background: var(--color-surface);
-  color: var(--color-text-secondary);
-  font-size: 0.85rem;
-  font-weight: 600;
+/* ─── Logout — bajo perfil, solo aparece visualmente en hover ─────────────── */
+
+.logoutBtn {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: rgba(136, 136, 136, 0.45);
+  cursor: pointer;
+  transition: color 150ms ease, border-color 150ms ease, background 150ms ease;
+  margin-left: 2px;
+  flex-shrink: 0;
 }
 
-/* Botón logout */
-
-.logoutBtn {
-  padding: 0.5rem 0.9rem;
-  border-radius: 6px;
-  border: 1px solid var(--color-border);
-  background: transparent;
-  color: var(--color-danger);
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 150ms ease;
+.logoutBtn svg {
+  width: 15px;
+  height: 15px;
 }
 
 .logoutBtn:hover {
-  background: var(--color-danger);
-  color: #fff;
-  border-color: var(--color-danger);
+  color: var(--color-danger);
+  border-color: rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.07);
 }
 
 .logoutBtn:active {
-  transform: scale(0.96);
+  transform: scale(0.94);
 }
+
+/* ─── Responsive ─────────────────────────────────────────────────────────── */
 
 /* 1280px — laptops chicas */
 @media (max-width: 1280px) {
   .header {
     padding: 0 24px;
-    height: 64px;
+    height: 56px;
   }
 
   .logo {
-    font-size: 1.6rem;
+    font-size: 1.2rem;
   }
 
   .nav {
-    gap: 16px;
+    gap: 2px;
+  }
+
+  .link {
+    font-size: 0.83rem;
+    padding: 0.3rem 0.55rem;
   }
 }
 
@@ -134,10 +211,11 @@
 @media (min-width: 1281px) and (max-width: 1366px) {
   .header {
     padding: 0 32px;
+    height: 58px;
   }
 
   .logo {
-    font-size: 1.75rem;
+    font-size: 1.25rem;
   }
 }
 
@@ -145,34 +223,45 @@
 @media (min-width: 1367px) and (max-width: 1440px) {
   .header {
     padding: 0 40px;
+    height: 60px;
   }
 
   .logo {
-    font-size: 2rem;
+    font-size: 1.3rem;
   }
 }
 
 /* 2560px — QHD */
 @media (min-width: 2560px) {
   .header {
-    height: 100px;
+    height: 80px;
     padding: 0 80px;
   }
 
   .logo {
-    font-size: 2.75rem;
+    font-size: 1.75rem;
   }
 
   .link {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 
   .nav {
-    gap: 32px;
+    gap: 6px;
   }
 
   .avatarLink {
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 36px;
+    height: 36px;
+  }
+
+  .logoutBtn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .logoutBtn svg {
+    width: 17px;
+    height: 17px;
   }
 }

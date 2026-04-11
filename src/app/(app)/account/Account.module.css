@@ -1,70 +1,311 @@
+/* ─── Página ──────────────────────────────────────────────────────────────── */
+
 .account {
   display: flex;
   width: 100%;
-  min-height: calc(100dvh - 80px);
+  min-height: calc(100dvh - 64px);
   justify-content: center;
   align-items: center;
-  padding: 2rem;
+  padding: 3rem 2rem;
 }
+
+/* ─── Layout ─────────────────────────────────────────────────────────────── */
 
 .container {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  width: 100%;
-  max-width: 36rem;
-  padding: 2.5rem;
-  border-radius: 0.75rem;
-  border: 1px solid var(--color-border);
-  background: var(--color-surface);
-}
-
-.title {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: var(--color-text);
-}
-
-.info {
-  display: flex;
-  flex-direction: column;
   gap: 0;
-}
-
-.divider {
   width: 100%;
-  height: 1px;
-  background: var(--color-border);
-  margin: 1rem 0;
+  max-width: 480px;
 }
 
-.group {
+/* ─── Cabecera — avatar + nombre ─────────────────────────────────────────── */
+
+.profileHeader {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  align-items: center;
+  gap: 1rem;
+  padding: 2.25rem 2rem 2rem;
+  border-radius: 12px 12px 0 0;
+  border: 1px solid rgba(42, 42, 42, 0.9);
+  border-bottom: none;
+  background: #1a1a1a;
+  position: relative;
 }
 
-.groupInfo {
+/* Gradiente decorativo en el fondo de la cabecera */
+.profileHeader::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  border-radius: 12px 12px 0 0;
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.07) 0%,
+    rgba(249, 115, 22, 0.04) 100%
+  );
+  pointer-events: none;
+}
+
+/* Ring del avatar — gradiente acento */
+.avatarRing {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  padding: 2.5px;
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.7) 0%,
+    rgba(249, 115, 22, 0.5) 100%
+  );
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.avatarImg {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #1a1a1a;
+  display: block;
+}
+
+/* Fallback inicial si no hay foto */
+.avatarFallback {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--color-surface);
+  border: 2px solid #1a1a1a;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-}
-
-.icon {
-  width: 1rem;
-  height: 1rem;
-  opacity: 0.5;
-}
-
-.label {
-  font-size: 1.2rem;
-  font-weight: 500;
-  color: var(--color-text);
-}
-
-.value {
-  font-size: 1rem;
-  font-weight: 400;
+  justify-content: center;
+  font-size: 1.6rem;
+  font-weight: 700;
   color: var(--color-text-secondary);
-  padding-left: 1.5rem;
+}
+
+.profileName {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  position: relative;
+  z-index: 1;
+}
+
+.displayName {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--color-text);
+  letter-spacing: -0.01em;
+  text-align: center;
+}
+
+/* Badge "Cuenta de Google" */
+.googleBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(30, 30, 30, 0.9);
+  border: 1px solid rgba(42, 42, 42, 0.9);
+  font-size: 0.72rem;
+  color: rgba(136, 136, 136, 0.7);
+  font-family: "JetBrains Mono", monospace;
+}
+
+.googleBadge img {
+  width: 11px;
+  height: 11px;
+  opacity: 0.75;
+}
+
+/* ─── Campos de info — zona central ──────────────────────────────────────── */
+
+.infoCard {
+  border: 1px solid rgba(42, 42, 42, 0.9);
+  border-top: none;
+  border-bottom: none;
+  background: #161616;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1.5rem;
+  gap: 1rem;
+  border-bottom: 1px solid rgba(42, 42, 42, 0.6);
+}
+
+.field:last-child {
+  border-bottom: none;
+}
+
+.fieldLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.fieldIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: rgba(30, 30, 30, 0.9);
+  border: 1px solid rgba(42, 42, 42, 0.9);
+  flex-shrink: 0;
+  color: rgba(136, 136, 136, 0.55);
+}
+
+.fieldIcon svg {
+  width: 12px;
+  height: 12px;
+}
+
+.fieldLabel {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.fieldValue {
+  font-size: 0.875rem;
+  color: var(--color-text);
+  text-align: right;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fieldValueMono {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.78rem;
+  color: var(--color-text-secondary);
+}
+
+/* ─── Footer — nota + logout ─────────────────────────────────────────────── */
+
+.profileFooter {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: 0 0 12px 12px;
+  border: 1px solid rgba(42, 42, 42, 0.9);
+  border-top: none;
+  background: #141414;
+}
+
+.readOnlyNote {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  color: rgba(136, 136, 136, 0.5);
+  line-height: 1.5;
+}
+
+.readOnlyNote svg {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  opacity: 0.6;
+}
+
+.readOnlyLink {
+  color: rgba(59, 130, 246, 0.65);
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+
+.readOnlyLink:hover {
+  color: var(--color-accent);
+}
+
+.logoutRow {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.logoutBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 7px;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  background: transparent;
+  color: rgba(239, 68, 68, 0.6);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: color 150ms ease, border-color 150ms ease, background 150ms ease;
+}
+
+.logoutBtn svg {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+}
+
+.logoutBtn:hover {
+  color: var(--color-danger);
+  border-color: rgba(239, 68, 68, 0.4);
+  background: rgba(239, 68, 68, 0.07);
+}
+
+.logoutBtn:active {
+  transform: scale(0.97);
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────────────── */
+
+@media (max-width: 1280px) {
+  .account {
+    padding: 2rem 1.25rem;
+    align-items: flex-start;
+  }
+
+  .container {
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 2560px) {
+  .container {
+    max-width: 560px;
+  }
+
+  .displayName {
+    font-size: 1.35rem;
+  }
+
+  .fieldLabel {
+    font-size: 0.88rem;
+  }
+
+  .fieldValue {
+    font-size: 1rem;
+  }
+
+  .avatarRing {
+    width: 90px;
+    height: 90px;
+  }
 }

@@ -61,19 +61,31 @@ export default function BoardCanvas({ boardId }: { boardId: string }) {
                 <div
                   style={{
                     position: "absolute",
-                    bottom: 60,
+                    bottom: 64,
                     left: "50%",
                     transform: "translateX(-50%)",
                     display: "flex",
-                    gap: 8,
+                    alignItems: "center",
+                    gap: 6,
                     zIndex: 1000,
                     pointerEvents: "all",
-                    background: "rgba(30,30,30,0.9)",
-                    padding: "6px 12px",
-                    borderRadius: 8,
+                    background: "rgba(18, 18, 18, 0.92)",
+                    backdropFilter: "blur(10px)",
+                    WebkitBackdropFilter: "blur(10px)",
+                    padding: "6px 8px",
+                    borderRadius: 10,
+                    border: "1px solid rgba(42, 42, 42, 0.9)",
+                    boxShadow: "0 4px 20px rgba(0,0,0,0.5)",
                   }}
                 >
                   <ModeToggleButton />
+                  {/* Separador */}
+                  <div style={{
+                    width: 1,
+                    height: 18,
+                    background: "rgba(42, 42, 42, 0.9)",
+                    flexShrink: 0,
+                  }} />
                   <AddCodeBlockButton />
                 </div>
               </>

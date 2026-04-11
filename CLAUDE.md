@@ -28,6 +28,7 @@ Inkode es una herramienta web para developers que permite guardar y anotar bloqu
 | Auth | Firebase Auth (Google) |
 | Base de datos | Firebase Firestore |
 | Deploy | Vercel — https://inkode-web.vercel.app |
+| Analytics | Posthog (`posthog-js`) |
 
 **Fuentes:** Inter (UI), JetBrains Mono (código)
 
@@ -92,6 +93,9 @@ src/
   context/
     authContext.tsx        ← AuthProvider + useAuth hook
     modeContext.tsx        ← ModeProvider + useMode hook
+    posthogContext.tsx     ← inicialización de Posthog + PosthogProvider + identificación de usuario
+  hooks/
+    useAnalytics.ts        ← hook useAnalytics() para trackear eventos
   lib/
     boards.ts             ← CRUD de tableros + saveBoardCanvas + loadBoardCanvas
     users.ts              ← createUserProfile, getUserProfile, completarTour
@@ -183,6 +187,13 @@ users (colección)
 - **Firestore**: guardado solo al salir del canvas (`beforeunload`, `pagehide`, `visibilitychange`)
 - Al cargar: se compara `savedAt` de localStorage vs Firestore y se usa el más reciente
 - Este esquema minimiza escrituras a Firestore (plan gratuito Spark)
+
+### Analytics — Posthog
+- Inicializado en `posthogContext.tsx` con autocapture y session recording desactivados (evitar ruido del canvas)
+- El usuario se identifica automáticamente con su uid, email y nombre al loguearse
+- `useAnalytics()` desde `@/hooks/useAnalytics` expone `track(event, properties)`
+- Eventos trackeados: `code_block_created`, `code_copied` (con lenguaje), `$pageview`, `$pageleave`
+- Variables de entorno: `NEXT_PUBLIC_POSTHOG_KEY`, `NEXT_PUBLIC_POSTHOG_HOST`
 
 ### Firestore — optimización de lecturas
 - `getBoards` usa `getDocs` (una sola lectura) en lugar de `onSnapshot` (tiempo real)
