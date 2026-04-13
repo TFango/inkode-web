@@ -6,9 +6,9 @@ import {
   where,
   getDocs,
   deleteDoc,
-  doc,
   setDoc,
   getDoc,
+  doc,
 } from "firebase/firestore";
 import { db } from "./firebase";
 import { Board } from "@/types/board";
@@ -112,4 +112,20 @@ export async function setBoardPublic(boardId: string): Promise<void> {
       merge: true,
     },
   );
+}
+
+// OBTENER UN SOLO TABLERO
+
+export async function getBoardById(boardId: string): Promise<Board | null> {
+  if (!boardId) {
+    throw new Error("No se ingreso el boardId");
+  }
+
+  const ref = await getDoc(doc(db, "boards", boardId));
+
+  if (!ref.exists()) {
+    return null;
+  }
+
+  return { id: ref.id, ...ref.data() } as Board;
 }
