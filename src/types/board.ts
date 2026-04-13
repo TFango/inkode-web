@@ -5,4 +5,5 @@ export type Board = {
   name: string;
   userId: string;
   createdAt: Timestamp;
+  isPublic?: boolean;
 };

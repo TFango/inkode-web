@@ -13,7 +13,6 @@ import {
 import { db } from "./firebase";
 import { Board } from "@/types/board";
 
-
 // CREAR TABLERO
 
 export async function createBoard(data: {
@@ -61,7 +60,9 @@ export async function saveBoardCanvas(
   const sizeKB = new Blob([serialized]).size / 1024;
 
   if (sizeKB > 800) {
-    console.warn(`[inkode] Canvas muy grande: ${sizeKB.toFixed(0)}KB. Límite Firestore: 1024KB.`);
+    console.warn(
+      `[inkode] Canvas muy grande: ${sizeKB.toFixed(0)}KB. Límite Firestore: 1024KB.`,
+    );
   }
 
   if (sizeKB >= 1024) {
@@ -70,9 +71,12 @@ export async function saveBoardCanvas(
   }
 
   const ref = doc(db, "boards", boardId);
-  await setDoc(ref, { canvas: snapshot, canvasSavedAt: Date.now() }, { merge: true });
+  await setDoc(
+    ref,
+    { canvas: snapshot, canvasSavedAt: Date.now() },
+    { merge: true },
+  );
 }
-
 
 // CARGAR SNAPSHOT DEL CANVAS
 
@@ -90,4 +94,22 @@ export async function loadBoardCanvas(
   console.log(`[inkode] Canvas cargado: ${sizeKB.toFixed(0)}KB`);
 
   return { snapshot: data.canvas, savedAt: data.canvasSavedAt ?? 0 };
+}
+
+// COMPARTIR BOARD
+
+export async function setBoardPublic(boardId: string): Promise<void> {
+  if (!boardId) {
+    throw new Error("Falta ingresar el boardId");
+  }
+
+  const ref = doc(db, "boards", boardId);
+
+  await setDoc(
+    ref,
+    { isPublic: true },
+    {
+      merge: true,
+    },
+  );
 }
