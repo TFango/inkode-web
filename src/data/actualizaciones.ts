@@ -22,6 +22,17 @@ Ejemplos de progresión:
 
 export const actualizaciones: Version[] = [
   {
+    version: "0.5.0",
+    date: "2026-04-13",
+    title: "Compartir tableros",
+    changes: [
+      "Los tableros se pueden hacer públicos con un link compartible",
+      "Vista de solo lectura para visitantes — pan y zoom sin edición",
+      "Badge 'Hecho con Inkode' en tableros compartidos",
+      "Botón para guardar un tablero compartido en tu propia cuenta",
+    ],
+  },
+  {
     version: "0.4.0",
     date: "2026-04-11",
     title: "Rediseño visual completo de la interfaz",
