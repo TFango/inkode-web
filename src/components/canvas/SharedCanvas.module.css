@@ -19,3 +19,22 @@
 .badge a:hover {
   color: var(--color-text);
 }
+
+.saveBtn {
+  position: fixed;
+  bottom: 16px;
+  right: 140px;
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  z-index: 9999;
+  transition: background 150ms ease;
+}
+
+.saveBtn:hover {
+  background: var(--color-accent-hover);
+}

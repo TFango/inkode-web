@@ -18,7 +18,7 @@ import { Board } from "@/types/board";
 export async function createBoard(data: {
   name: string;
   userId: string;
-}): Promise<void> {
+}): Promise<string> {
   const { name, userId } = data;
 
   if (!name || !userId) {
@@ -26,11 +26,13 @@ export async function createBoard(data: {
   }
 
   // Crea un nuevo documento en la collecion "boards"
-  await addDoc(collection(db, "boards"), {
+  const ref = await addDoc(collection(db, "boards"), {
     name,
     userId,
     createdAt: serverTimestamp(),
   });
+
+  return ref.id;
 }
 
 // OBTENER TABLEROS DEL USUARIO

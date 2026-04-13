@@ -7,6 +7,7 @@ import { CodeBlockShapeUtil } from "./CodeBlockShape";
 import { loadBoardCanvas } from "@/lib/boards";
 import SharedBadge from "./SharedBadge";
 import { ModeProvider } from "@/context/modeContext";
+import SaveBoardButton from "./SaveBoardButton";
 
 const shapeUtils = [CodeBlockShapeUtil];
 
@@ -56,6 +57,7 @@ export default function SharedCanvas({
         />
       </ModeProvider>
       <SharedBadge />
+      <SaveBoardButton boardId={boardId} boardName={name} snapshot={snap}/>
     </div>
   );
 }
