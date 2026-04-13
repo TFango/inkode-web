@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import styles from "./BoardCard.module.css";
 import { Board } from "@/types/board";
+import { setBoardPublic } from "@/lib/boards";
 
 type Props = {
   board: Board;
@@ -12,14 +13,34 @@ type Props = {
 
 function IconTrash() {
   return (
-    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <path d="M2.5 4h11M6 4V2.5h4V4M4.5 4l.75 9h5.5l.75-9" />
     </svg>
   );
 }
 
-// Genera un patrón de anchos "pseudoaleatorio" basado en el nombre del tablero
-// para que cada card tenga líneas de código distintas
+function IconShare() {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M10 2l4 4-4 4M14 6H6a4 4 0 000 8h1" />
+    </svg>
+  );
+}
+
 function getLineWidths(seed: string): number[] {
   const base = [62, 45, 78, 30, 55, 40, 68];
   let hash = 0;
@@ -35,6 +56,7 @@ function getLineWidths(seed: string): number[] {
 export default function BoardCard({ board, onDelete }: Props) {
   const router = useRouter();
   const [confirming, setConfirming] = useState(false);
+  const [copied, setCopied] = useState(false);
   const lineWidths = getLineWidths(board.name);
 
   const handleClick = () => {
@@ -57,6 +79,17 @@ export default function BoardCard({ board, onDelete }: Props) {
     setConfirming(false);
   };
 
+  const handleShare = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    if (!board.isPublic) await setBoardPublic(board.id);
+
+    const url = `${process.env.NEXT_PUBLIC_APP_URL}/shared/${board.id}`;
+    await navigator.clipboard.writeText(url);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   const formattedDate = board.createdAt?.toDate().toLocaleDateString("es-AR", {
     day: "numeric",
     month: "short",
@@ -68,14 +101,9 @@ export default function BoardCard({ board, onDelete }: Props) {
       onClick={handleClick}
       onMouseLeave={() => setConfirming(false)}
     >
-      {/* Preview — canvas simulado */}
       <div className={styles.preview}>
         {lineWidths.map((w, i) => (
-          <div
-            key={i}
-            className={styles.codeLine}
-            style={{ width: `${w}%` }}
-          />
+          <div key={i} className={styles.codeLine} style={{ width: `${w}%` }} />
         ))}
         <div className={styles.previewMode}>
           <div className={styles.previewModeDot} />
@@ -93,17 +121,34 @@ export default function BoardCard({ board, onDelete }: Props) {
         {confirming ? (
           <div className={styles.confirm}>
             <span className={styles.confirmText}>¿Eliminar?</span>
-            <button className={styles.confirmYes} onClick={handleConfirm}>Sí</button>
-            <button className={styles.confirmNo} onClick={handleCancel}>No</button>
+            <button className={styles.confirmYes} onClick={handleConfirm}>
+              Sí
+            </button>
+            <button className={styles.confirmNo} onClick={handleCancel}>
+              No
+            </button>
           </div>
         ) : (
-          <button
-            className={styles.deleteBtn}
-            onClick={handleDeleteClick}
-            title="Eliminar tablero"
-          >
-            <IconTrash />
-          </button>
+          <div style={{ display: "flex", gap: 4 }}>
+            <button
+              className={
+                copied
+                  ? styles.shareBtn + " " + styles.shareBtnActive
+                  : styles.shareBtn
+              }
+              onClick={handleShare}
+              title={board.isPublic ? "Copiar link" : "Compartir tablero"}
+            >
+              {copied ? "¡Copiado!" : <IconShare />}
+            </button>
+            <button
+              className={styles.deleteBtn}
+              onClick={handleDeleteClick}
+              title="Eliminar tablero"
+            >
+              <IconTrash />
+            </button>
+          </div>
         )}
       </div>
     </div>
