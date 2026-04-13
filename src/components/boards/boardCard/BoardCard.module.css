@@ -15,7 +15,9 @@
 .card:hover {
   border-color: rgba(59, 130, 246, 0.4);
   transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), 0 0 0 0 rgba(59, 130, 246, 0);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.35),
+    0 0 0 0 rgba(59, 130, 246, 0);
 }
 
 /* ─── Preview — canvas simulado ─────────────────────────────────────────── */
@@ -42,13 +44,33 @@
 }
 
 /* Variaciones de ancho para que parezca código real */
-.codeLine:nth-child(1)  { width: 62%; }
-.codeLine:nth-child(2)  { width: 45%; background: rgba(249, 115, 22, 0.1); border-color: rgba(249, 115, 22, 0.07); }
-.codeLine:nth-child(3)  { width: 78%; }
-.codeLine:nth-child(4)  { width: 30%; background: rgba(167, 139, 250, 0.1); border-color: rgba(167, 139, 250, 0.07); }
-.codeLine:nth-child(5)  { width: 55%; }
-.codeLine:nth-child(6)  { width: 40%; background: rgba(249, 115, 22, 0.1); border-color: rgba(249, 115, 22, 0.07); }
-.codeLine:nth-child(7)  { width: 68%; }
+.codeLine:nth-child(1) {
+  width: 62%;
+}
+.codeLine:nth-child(2) {
+  width: 45%;
+  background: rgba(249, 115, 22, 0.1);
+  border-color: rgba(249, 115, 22, 0.07);
+}
+.codeLine:nth-child(3) {
+  width: 78%;
+}
+.codeLine:nth-child(4) {
+  width: 30%;
+  background: rgba(167, 139, 250, 0.1);
+  border-color: rgba(167, 139, 250, 0.07);
+}
+.codeLine:nth-child(5) {
+  width: 55%;
+}
+.codeLine:nth-child(6) {
+  width: 40%;
+  background: rgba(249, 115, 22, 0.1);
+  border-color: rgba(249, 115, 22, 0.07);
+}
+.codeLine:nth-child(7) {
+  width: 68%;
+}
 
 /* Gradiente de fade en la parte inferior */
 .preview::after {
@@ -204,4 +226,39 @@
 .confirmNo:hover {
   color: var(--color-text);
   border-color: rgba(136, 136, 136, 0.4);
+}
+
+.shareBtn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition:
+    color 150ms ease,
+    border-color 150ms ease,
+    background 150ms ease;
+}
+
+.shareBtn svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.shareBtn:hover {
+  color: var(--color-text);
+  background: var(--color-border);
+}
+
+.shareBtnActive {
+  color: var(--color-accent);
+  font-size: 11px;
+  white-space: nowrap;
 }
