@@ -142,10 +142,14 @@
   font-family: "JetBrains Mono", monospace;
 }
 
-/* ─── Delete button ───────────────────────────────────────────────────────── */
+/* ─── Menu button (⋯) ────────────────────────────────────────────────────── */
 
-.deleteBtn {
+.menuWrapper {
+  position: relative;
   flex-shrink: 0;
+}
+
+.menuBtn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -162,43 +166,96 @@
     background 150ms ease;
 }
 
-.deleteBtn svg {
-  width: 14px;
-  height: 14px;
-  flex-shrink: 0;
-}
-
-.card:hover .deleteBtn {
+.card:hover .menuBtn {
   color: var(--color-text-secondary);
   border-color: rgba(42, 42, 42, 0.9);
 }
 
-.deleteBtn:hover {
-  color: var(--color-danger) !important;
-  border-color: rgba(239, 68, 68, 0.35) !important;
-  background: rgba(239, 68, 68, 0.08) !important;
+.menuBtn:hover,
+.menuBtnActive {
+  color: var(--color-text) !important;
+  border-color: rgba(42, 42, 42, 0.9) !important;
+  background: var(--color-border) !important;
 }
 
-/* ─── Confirm state ───────────────────────────────────────────────────────── */
+/* ─── Dropdown ───────────────────────────────────────────────────────────── */
 
-.confirm {
+.dropdown {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  right: 0;
+  min-width: 172px;
+  background: #1a1a1a;
+  border: 1px solid rgba(42, 42, 42, 0.95);
+  border-radius: 8px;
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.4),
+    0 1px 4px rgba(0, 0, 0, 0.25);
+  padding: 4px;
+  z-index: 10;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.45rem 0.6rem;
+  border-radius: 5px;
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition:
+    background 120ms ease,
+    color 120ms ease;
+  text-align: left;
+}
+
+.dropdownItem:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--color-text);
+}
+
+.dropdownItemDanger:hover {
+  background: rgba(239, 68, 68, 0.08);
+  color: var(--color-danger);
+}
+
+.dropdownIcon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.dropdownIcon svg {
+  width: 13px;
+  height: 13px;
+}
+
+/* ─── Confirm row (dentro del dropdown) ──────────────────────────────────── */
+
+.confirmRow {
   display: flex;
   align-items: center;
   gap: 0.35rem;
-  flex-shrink: 0;
+  padding: 0.45rem 0.6rem;
 }
 
 .confirmText {
   font-size: 0.78rem;
   color: var(--color-text-secondary);
   white-space: nowrap;
+  flex: 1;
 }
 
 .confirmYes,
 .confirmNo {
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   font-weight: 500;
-  padding: 0.25rem 0.55rem;
+  padding: 0.2rem 0.5rem;
   border-radius: 5px;
   cursor: pointer;
   transition: all 130ms ease;
@@ -226,39 +283,4 @@
 .confirmNo:hover {
   color: var(--color-text);
   border-color: rgba(136, 136, 136, 0.4);
-}
-
-.shareBtn {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
-  border: 1px solid transparent;
-  background: transparent;
-  color: var(--color-text-secondary);
-  cursor: pointer;
-  transition:
-    color 150ms ease,
-    border-color 150ms ease,
-    background 150ms ease;
-}
-
-.shareBtn svg {
-  width: 14px;
-  height: 14px;
-  flex-shrink: 0;
-}
-
-.shareBtn:hover {
-  color: var(--color-text);
-  background: var(--color-border);
-}
-
-.shareBtnActive {
-  color: var(--color-accent);
-  font-size: 11px;
-  white-space: nowrap;
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./BoardCard.module.css";
 import { Board } from "@/types/board";
 import { setBoardPublic } from "@/lib/boards";
@@ -41,6 +41,21 @@ function IconShare() {
   );
 }
 
+function IconDots() {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      fill="currentColor"
+      width="14"
+      height="14"
+    >
+      <circle cx="3" cy="8" r="1.5" />
+      <circle cx="8" cy="8" r="1.5" />
+      <circle cx="13" cy="8" r="1.5" />
+    </svg>
+  );
+}
+
 function getLineWidths(seed: string): number[] {
   const base = [62, 45, 78, 30, 55, 40, 68];
   let hash = 0;
@@ -55,13 +70,35 @@ function getLineWidths(seed: string): number[] {
 
 export default function BoardCard({ board, onDelete }: Props) {
   const router = useRouter();
+  const [menuOpen, setMenuOpen] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const [copied, setCopied] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
   const lineWidths = getLineWidths(board.name);
 
   const handleClick = () => {
-    if (confirming) return;
+    if (menuOpen || confirming) return;
     router.push(`/boards/${board.id}`);
+  };
+
+  const handleMenuToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setMenuOpen((prev) => !prev);
+    setConfirming(false);
+  };
+
+  const handleShare = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    if (!board.isPublic) await setBoardPublic(board.id);
+
+    const url = `${process.env.NEXT_PUBLIC_APP_URL}/shared/${board.id}`;
+    await navigator.clipboard.writeText(url);
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+      setMenuOpen(false);
+    }, 1500);
   };
 
   const handleDeleteClick = (e: React.MouseEvent) => {
@@ -79,16 +116,18 @@ export default function BoardCard({ board, onDelete }: Props) {
     setConfirming(false);
   };
 
-  const handleShare = async (e: React.MouseEvent) => {
-    e.stopPropagation();
-
-    if (!board.isPublic) await setBoardPublic(board.id);
-
-    const url = `${process.env.NEXT_PUBLIC_APP_URL}/shared/${board.id}`;
-    await navigator.clipboard.writeText(url);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+  // Cerrar menú al hacer click fuera
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handleOutside = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+        setConfirming(false);
+      }
+    };
+    document.addEventListener("mousedown", handleOutside);
+    return () => document.removeEventListener("mousedown", handleOutside);
+  }, [menuOpen]);
 
   const formattedDate = board.createdAt?.toDate().toLocaleDateString("es-AR", {
     day: "numeric",
@@ -99,7 +138,9 @@ export default function BoardCard({ board, onDelete }: Props) {
     <div
       className={styles.card}
       onClick={handleClick}
-      onMouseLeave={() => setConfirming(false)}
+      onMouseLeave={() => {
+        if (!menuOpen) setConfirming(false);
+      }}
     >
       <div className={styles.preview}>
         {lineWidths.map((w, i) => (
@@ -118,38 +159,42 @@ export default function BoardCard({ board, onDelete }: Props) {
           <span className={styles.date}>{formattedDate}</span>
         </div>
 
-        {confirming ? (
-          <div className={styles.confirm}>
-            <span className={styles.confirmText}>¿Eliminar?</span>
-            <button className={styles.confirmYes} onClick={handleConfirm}>
-              Sí
-            </button>
-            <button className={styles.confirmNo} onClick={handleCancel}>
-              No
-            </button>
-          </div>
-        ) : (
-          <div style={{ display: "flex", gap: 4 }}>
-            <button
-              className={
-                copied
-                  ? styles.shareBtn + " " + styles.shareBtnActive
-                  : styles.shareBtn
-              }
-              onClick={handleShare}
-              title={board.isPublic ? "Copiar link" : "Compartir tablero"}
-            >
-              {copied ? "¡Copiado!" : <IconShare />}
-            </button>
-            <button
-              className={styles.deleteBtn}
-              onClick={handleDeleteClick}
-              title="Eliminar tablero"
-            >
-              <IconTrash />
-            </button>
-          </div>
-        )}
+        <div className={styles.menuWrapper} ref={menuRef}>
+          <button
+            className={`${styles.menuBtn}${menuOpen ? " " + styles.menuBtnActive : ""}`}
+            onClick={handleMenuToggle}
+            title="Opciones"
+          >
+            <IconDots />
+          </button>
+
+          {menuOpen && (
+            <div className={styles.dropdown} onClick={(e) => e.stopPropagation()}>
+              {/* Opción compartir */}
+              <button className={styles.dropdownItem} onClick={handleShare}>
+                <span className={styles.dropdownIcon}><IconShare /></span>
+                <span>{copied ? "¡Copiado!" : board.isPublic ? "Copiar link" : "Compartir tablero"}</span>
+              </button>
+
+              {/* Opción eliminar — con confirm inline */}
+              {confirming ? (
+                <div className={styles.confirmRow}>
+                  <span className={styles.confirmText}>¿Eliminar?</span>
+                  <button className={styles.confirmYes} onClick={handleConfirm}>Sí</button>
+                  <button className={styles.confirmNo} onClick={handleCancel}>No</button>
+                </div>
+              ) : (
+                <button
+                  className={`${styles.dropdownItem} ${styles.dropdownItemDanger}`}
+                  onClick={handleDeleteClick}
+                >
+                  <span className={styles.dropdownIcon}><IconTrash /></span>
+                  <span>Eliminar tablero</span>
+                </button>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

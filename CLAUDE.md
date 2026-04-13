@@ -66,6 +66,11 @@ src/
       boards/
         [boardId]/
           page.tsx        ← canvas infinito (server component, pasa boardId a BoardCanvas)
+    (shared)/
+      shared/
+        [boardId]/
+          page.tsx        ← vista pública de tablero compartido (server component, verifica isPublic)
+      layout.tsx          ← layout sin header para vistas compartidas
     login/
       page.tsx            ← login con Google
       layout.tsx          ← Header variant="login"
@@ -86,6 +91,9 @@ src/
       ModeController.tsx       ← sincroniza modo con tldraw
       ModeToggleButton.tsx     ← botón cambiar entre modos (texto "Código"/"Dibujo")
       OnboardingTooltip.tsx    ← tour guiado para nuevos usuarios
+      SharedCanvas.tsx         ← canvas público de solo lectura (tldraw readOnly + ModeProvider fijo)
+      SharedBadge.tsx          ← badge "Hecho con Inkode" con link a /login
+      SaveBoardButton.tsx      ← botón para duplicar un tablero compartido a la cuenta del usuario
     layout/
       header/
         Header.tsx         ← header con variante login/app
@@ -97,7 +105,7 @@ src/
   hooks/
     useAnalytics.ts        ← hook useAnalytics() para trackear eventos
   lib/
-    boards.ts             ← CRUD de tableros + saveBoardCanvas + loadBoardCanvas
+    boards.ts             ← CRUD de tableros + saveBoardCanvas + loadBoardCanvas + getBoardById + setBoardPublic
     users.ts              ← createUserProfile, getUserProfile, completarTour
     firebase.ts           ← inicialización de Firebase
   types/
@@ -134,6 +142,7 @@ boards (colección)
         ├── name: string
         ├── userId: string
         ├── createdAt: Timestamp
+        ├── isPublic?: boolean  ← si true, cualquiera puede leer sin auth
         └── canvas: object  ← snapshot de tldraw (getSnapshot/loadSnapshot)
 
 users (colección)
@@ -141,7 +150,7 @@ users (colección)
         └── tourCompletado: boolean
 ```
 
-**Reglas de seguridad:** cada usuario solo puede leer/escribir sus propios documentos.
+**Reglas de seguridad:** cada usuario solo puede leer/escribir sus propios documentos. Excepción: `boards` con `isPublic === true` son legibles por cualquiera (incluso sin auth).
 
 **Nota sobre usuarios existentes:** los usuarios registrados antes de la colección `users` no tienen documento. `getUserProfile` retorna `null` para ellos, lo que se trata igual que `tourCompletado: false` — el tour aparece igual y al terminar se crea el documento.
 
@@ -158,7 +167,9 @@ users (colección)
 - `AuthContext` expone `tourCompletado` (boolean | null) y `setTourCompletado` para controlar el onboarding
 
 ### Canvas — tldraw
-- `BoardCanvas.tsx` es el único componente cliente que monta `<Tldraw>`
+- `BoardCanvas.tsx` es el único componente cliente que monta `<Tldraw>` para el dueño
+- `SharedCanvas.tsx` monta `<Tldraw>` para visitantes — usa `editor.updateInstanceState({ isReadonly: true })` via `onMount` para bloquear toda edición. Pan y zoom siguen funcionando.
+- En `SharedCanvas`, `ModeProvider` se monta con `mode: "draw"` fijo para que Monaco quede en `readOnly`
 - `page.tsx` del canvas es un **server component** que hace `await params` y pasa `boardId` como prop
 - Los componentes que usan `useEditor()` deben vivir **dentro** del árbol de `<Tldraw>` via la prop `components`
 - Para registrar custom shapes: `shapeUtils={[CodeBlockShapeUtil]}` fuera del componente para evitar re-renders
@@ -254,7 +265,7 @@ if (!user) return null
 
 - No es un IDE ni reemplaza VS Code
 - No ejecuta código
-- No es para compartir código públicamente (por ahora)
+- ~~No es para compartir código públicamente~~ — ya se puede compartir tableros con link público
 - No tiene responsive/mobile (solo desktop, mínimo 1280px)
 - No tiene modo claro (solo dark)
 
@@ -267,3 +278,5 @@ if (!user) return null
 - [ ] Conectar formulario de Feedback con Resend (requiere dominio)
 - [ ] Login con email/contraseña (baja prioridad, post-lanzamiento)
 - [ ] Resolver bug de teclado en Monaco (Delete, Tab, flechas interceptados por tldraw)
+- [ ] Toggle para volver a hacer privado un tablero (campo `isPublic` ya lo soporta)
+- [ ] Botón de copiar código en vista compartida

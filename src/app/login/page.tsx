@@ -125,7 +125,7 @@ export default function LoginPage() {
 
           {/* Título */}
           <h1 className={styles.title}>
-            Tu código,{" "}
+            Tu código,
             <span className={styles.titleAccent}>organizado</span>
             <br />
             en un canvas infinito
@@ -141,7 +141,7 @@ export default function LoginPage() {
           <div className={styles.features}>
             <div className={styles.feature}>
               <span className={styles.featureIcon}><IconLayers /></span>
-              Anotaciones en capa separada — el código queda limpio
+              Anotaciones en capa separada, el código queda limpio
             </div>
             <div className={styles.feature}>
               <span className={styles.featureIcon}><IconCode /></span>
