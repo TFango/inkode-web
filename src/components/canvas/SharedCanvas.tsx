@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { CodeBlockShapeUtil } from "./CodeBlockShape";
 import { loadBoardCanvas } from "@/lib/boards";
 import SharedBadge from "./SharedBadge";
+import { ModeProvider } from "@/context/modeContext";
 
 const shapeUtils = [CodeBlockShapeUtil];
 
@@ -37,18 +38,23 @@ export default function SharedCanvas({
 
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
-      <Tldraw
-        licenseKey={process.env.NEXT_PUBLIC_TLDRAW_LICENSE_KEY}
-        shapeUtils={shapeUtils}
-        inferDarkMode
-        snapshot={snap as any}
-        components={{
-          PageMenu: null,
-          Toolbar: null,
-          HelperButtons: null,
-          NavigationPanel: null,
-        }}
-      />
+      <ModeProvider value={{ mode: "draw", setMode: () => {} }}>
+        <Tldraw
+          licenseKey={process.env.NEXT_PUBLIC_TLDRAW_LICENSE_KEY}
+          shapeUtils={shapeUtils}
+          inferDarkMode
+          snapshot={snap as any}
+          components={{
+            PageMenu: null,
+            Toolbar: null,
+            HelperButtons: null,
+            NavigationPanel: null,
+          }}
+          onMount={(editor) => {
+            editor.updateInstanceState({ isReadonly: true });
+          }}
+        />
+      </ModeProvider>
       <SharedBadge />
     </div>
   );
