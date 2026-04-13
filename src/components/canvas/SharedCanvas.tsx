@@ -8,6 +8,7 @@ import { loadBoardCanvas } from "@/lib/boards";
 import SharedBadge from "./SharedBadge";
 import { ModeProvider } from "@/context/modeContext";
 import SaveBoardButton from "./SaveBoardButton";
+import styles from "./SharedCanvas.module.css";
 
 const shapeUtils = [CodeBlockShapeUtil];
 
@@ -56,8 +57,10 @@ export default function SharedCanvas({
           }}
         />
       </ModeProvider>
-      <SharedBadge />
-      <SaveBoardButton boardId={boardId} boardName={name} snapshot={snap}/>
+      <div className={styles.hud}>
+        <SaveBoardButton boardId={boardId} boardName={name} snapshot={snap}/>
+        <SharedBadge />
+      </div>
     </div>
   );
 }
